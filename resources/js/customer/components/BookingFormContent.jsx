@@ -9,37 +9,34 @@ function BookingFormContent() {
     const [settings, setSettings] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
-        country_code: '+44',
-        phone: '',
-        num_persons: '1',
-        booking_date: '',
-        booking_time: '',
+        email: '',
+        country: '',
+        product_interest: '',
         message: '',
-        terms_accepted: false,
-        privacy_accepted: false
     });
-    const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
-    
-    const countryCodes = [
-        { code: '+44', country: 'UK' },
-        { code: '+1', country: 'USA' },
-        { code: '+91', country: 'India' },
-        { code: '+61', country: 'Australia' },
-        { code: '+971', country: 'UAE' }
+    const countries = [
+        'United Kingdom', 'United States', 'India', 'Australia', 'UAE',
+        'Canada', 'Germany', 'France', 'Singapore', 'South Africa',
+        'Saudi Arabia', 'Nigeria', 'Kenya', 'Bangladesh', 'Pakistan',
+        'Sri Lanka', 'Malaysia', 'Philippines', 'Indonesia', 'Other'
+    ];
+
+    const productInterests = [
+        'Active Pharmaceutical Ingredients (APIs)',
+        'Finished Dosage Forms',
+        'Herbal & Nutraceuticals',
+        'Veterinary Products',
+        'Surgical & Medical Devices',
+        'Cosmetics & Personal Care',
+        'Other'
     ];
 
     useEffect(() => {
         fetchSettings();
     }, []);
-
-    useEffect(() => {
-        if (formData.booking_date) {
-            calculateAvailableTimeSlots(formData.booking_date);
-        }
-    }, [formData.booking_date, settings]);
 
     const fetchSettings = async () => {
         try {
@@ -52,37 +49,10 @@ function BookingFormContent() {
         }
     };
 
-    const getDayName = (date) => {
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        return days[new Date(date).getDay()];
-    };
-
-    const calculateAvailableTimeSlots = (dateStr) => {
-        if (!settings || !settings.booking_schedule) {
-            setAvailableTimeSlots([]);
-            return;
-        }
-
-        const dayName = getDayName(dateStr);
-        const daySchedule = settings.booking_schedule[dayName] || [];
-        
-        setAvailableTimeSlots(daySchedule.sort());
-    };
-
-    const formatTime = (time24) => {
-        const [hours, minutes] = time24.split(':');
-        const hour = parseInt(hours);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const hour12 = hour % 12 || 12;
-        return `${hour12}:${minutes} ${ampm}`;
-    };
-
     const getOpeningHours = () => {
         if (!settings) return [];
-        
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         const hours = [];
-
         days.forEach(day => {
             const slots = settings.booking_schedule?.[day] || [];
             if (slots.length > 0) {
@@ -94,61 +64,49 @@ function BookingFormContent() {
                 });
             }
         });
-
         return hours;
     };
 
+    const formatTime = (time24) => {
+        const [hours, minutes] = time24.split(':');
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    };
+
     const handleChange = (field, value) => {
-        setFormData({
-            ...formData,
-            [field]: value
-        });
+        setFormData({ ...formData, [field]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (!formData.terms_accepted || !formData.privacy_accepted) {
-            setMessage('Please accept the terms and conditions');
-            return;
-        }
-
         setLoading(true);
         setMessage('');
 
         try {
-            const response = await axios.post('/table-bookings', formData);
-            
+            const response = await axios.post('/enquiries', formData);
             if (response.data.success) {
-                setMessage('Booking request submitted successfully! We will contact you shortly.');
+                setMessage('Your enquiry has been submitted successfully! We will get back to you shortly.');
                 setFormData({
                     name: '',
-                    country_code: '+44',
-                    phone: '',
-                    num_persons: '1',
-                    booking_date: '',
-                    booking_time: '',
+                    email: '',
+                    country: '',
+                    product_interest: '',
                     message: '',
-                    terms_accepted: false,
-                    privacy_accepted: false
                 });
             }
         } catch (error) {
-            console.error('Booking error:', error);
-            setMessage('Failed to submit booking. Please try again.');
+            console.error('Enquiry error:', error);
+            setMessage('Failed to submit enquiry. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
     const groupHoursByPeriod = (hours) => {
-        const weekdays = hours.filter(h => 
-            !['Sunday', 'Saturday'].includes(h.day)
-        );
-        const weekend = hours.filter(h => 
-            ['Sunday', 'Saturday'].includes(h.day)
-        );
-
+        const weekdays = hours.filter(h => !['Sunday', 'Saturday'].includes(h.day));
+        const weekend = hours.filter(h => ['Sunday', 'Saturday'].includes(h.day));
         return { weekdays, weekend };
     };
 
@@ -158,15 +116,12 @@ function BookingFormContent() {
     return (
         <div className="booking-content-wrapper">
             <div className="booking-content-container">
-                {/* Left Section - Form */}
+
+                {/* Left Section — Enquiry Form */}
                 <div className="booking-content-form-section">
-                    <h1 className="booking-content-title">Request Callback</h1>
+                    <h1 className="booking-content-title">Product Enquiry</h1>
                     <p className="booking-content-subtitle">
-                        Booking request{' '}
-                        <a href={`tel:${settings?.contact_phone}`} className="booking-phone-link">
-                            {settings?.contact_phone || '+44 787 8277198'}
-                        </a>
-                        {' '}or fill out the order form for a callback
+                        Fill out the form below and our team will get back to you within 24 hours with pricing and availability.
                     </p>
 
                     {message && (
@@ -176,150 +131,83 @@ function BookingFormContent() {
                     )}
 
                     <form onSubmit={handleSubmit} className="booking-content-form">
+
+                        {/* Name */}
                         <div className="booking-form-group">
                             <input
                                 type="text"
                                 value={formData.name}
                                 onChange={(e) => handleChange('name', e.target.value)}
-                                placeholder="Name"
+                                placeholder="Full Name"
                                 required
                                 className="booking-form-input"
                             />
                         </div>
 
-                        <div className="booking-form-row">
-                            <select
-                                value={formData.country_code}
-                                onChange={(e) => handleChange('country_code', e.target.value)}
-                                className="booking-form-select booking-country-code"
-                            >
-                                {countryCodes.map(c => (
-                                    <option key={c.code} value={c.code}>
-                                        {c.code}
-                                    </option>
-                                ))}
-                            </select>
-
+                        {/* Email */}
+                        <div className="booking-form-group">
                             <input
-                                type="tel"
-                                value={formData.phone}
-                                onChange={(e) => handleChange('phone', e.target.value)}
-                                placeholder="Phone"
-                                required
-                                className="booking-form-input booking-phone-input"
-                            />
-                        </div>
-
-                        <div className="booking-form-row">
-                            <select
-                                value={formData.num_persons}
-                                onChange={(e) => handleChange('num_persons', e.target.value)}
-                                className="booking-form-select"
-                                required
-                            >
-                                {[...Array(20)].map((_, i) => (
-                                    <option key={i + 1} value={i + 1}>
-                                        {i + 1} Person{i > 0 ? 's' : ''}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <input
-                                type="date"
-                                value={formData.booking_date}
-                                onChange={(e) => handleChange('booking_date', e.target.value)}
-                                min={new Date().toISOString().split('T')[0]}
+                                type="email"
+                                value={formData.email}
+                                onChange={(e) => handleChange('email', e.target.value)}
+                                placeholder="Email Address"
                                 required
                                 className="booking-form-input"
                             />
+                        </div>
 
+                        {/* Country */}
+                        <div className="booking-form-group">
                             <select
-                                value={formData.booking_time}
-                                onChange={(e) => handleChange('booking_time', e.target.value)}
-                                className="booking-form-select"
+                                value={formData.country}
+                                onChange={(e) => handleChange('country', e.target.value)}
+                                className="booking-form-select booking-form-select-full"
                                 required
-                                disabled={!formData.booking_date}
                             >
-                                <option value="">Select Time</option>
-                                {availableTimeSlots.map(slot => (
-                                    <option key={slot} value={slot}>
-                                        {formatTime(slot)}
-                                    </option>
+                                <option value="">Select Country</option>
+                                {countries.map(c => (
+                                    <option key={c} value={c}>{c}</option>
                                 ))}
                             </select>
                         </div>
 
+                        {/* Product Interest */}
+                        <div className="booking-form-group">
+                            <select
+                                value={formData.product_interest}
+                                onChange={(e) => handleChange('product_interest', e.target.value)}
+                                className="booking-form-select booking-form-select-full"
+                                required
+                            >
+                                <option value="">Select Product Interest</option>
+                                {productInterests.map(p => (
+                                    <option key={p} value={p}>{p}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Message */}
                         <div className="booking-form-group">
                             <textarea
                                 value={formData.message}
                                 onChange={(e) => handleChange('message', e.target.value)}
-                                placeholder="Message"
+                                placeholder="Describe your requirements (quantity, specifications, destination, etc.)"
                                 rows="4"
                                 className="booking-form-textarea"
                             />
                         </div>
 
-                        <div className="booking-form-checkbox">
-                            <label className="booking-checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.terms_accepted}
-                                    onChange={(e) => handleChange('terms_accepted', e.target.checked)}
-                                    required
-                                />
-                                <span>
-                                    I accept the{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => navigate('/page/terms-and-conditions')}
-                                        className="booking-link-button"
-                                    >
-                                        Terms and Conditions
-                                    </button>
-                                </span>
-                            </label>
-                        </div>
-
-                        <div className="booking-form-checkbox">
-                            <label className="booking-checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.privacy_accepted}
-                                    onChange={(e) => handleChange('privacy_accepted', e.target.checked)}
-                                    required
-                                />
-                                <span>
-                                    By signing up, you acknowledge that you've read and agreed to Our{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => navigate('/page/terms-and-conditions')}
-                                        className="booking-link-button"
-                                    >
-                                        Terms and Conditions
-                                    </button>
-                                    {' '}and{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => navigate('/page/privacy-policy')}
-                                        className="booking-link-button"
-                                    >
-                                        Privacy Policy
-                                    </button>
-                                    , and consent to receive communications regarding your account, promotions, and other updates.
-                                </span>
-                            </label>
-                        </div>
-
                         <button type="submit" disabled={loading} className="booking-btn-book">
-                            {loading ? 'Submitting...' : 'BOOK A TABLE'}
+                            {loading ? 'Submitting...' : 'SEND ENQUIRY'}
                         </button>
+
                     </form>
                 </div>
 
-                {/* Right Section - Contact Info */}
+                {/* Right Section — Contact Info (unchanged) */}
                 <div className="booking-content-info-section">
                     <h2 className="booking-info-title">Contact Us</h2>
-                    
+
                     <div className="booking-info-item">
                         <h3 className="booking-info-label">Booking Request</h3>
                         <a href={`tel:${settings?.contact_phone}`} className="booking-info-value">
@@ -349,7 +237,6 @@ function BookingFormContent() {
                                 </div>
                             ))
                         )}
-                        
                         {weekend.map((hour, idx) => (
                             <div key={idx} className="booking-hours-group">
                                 <p className="booking-hours-days">{hour.day}</p>
@@ -358,6 +245,7 @@ function BookingFormContent() {
                         ))}
                     </div>
                 </div>
+
             </div>
         </div>
     );
