@@ -1,31 +1,15 @@
 <?php
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
-
-    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],  // Add '*' here
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:8000',
-        'http://127.0.0.1:8000',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'https://pvtapp-production-255e.up.railway.app',
-        'https://delightful-perception-production-9741.up.railway.app',
+        'http://localhost:8000',  // ✅ your local
+        'http://localhost:5173',  // ✅ Vite default
+        'http://localhost:3000',  // ✅ just in case
+        'https://pvtapp-production-7420.up.railway.app', // ✅ your live frontend
     ],
 
     'allowed_origins_patterns' => [],
@@ -37,5 +21,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => true,
-
 ];
