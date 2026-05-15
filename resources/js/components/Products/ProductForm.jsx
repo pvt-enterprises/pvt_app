@@ -37,17 +37,21 @@ function ProductForm() {
     const fetchCategories = async () => {
         try {
             const token = localStorage.getItem('auth_token');
-            const response = await axios.get(`${getApiBaseUrl()}/categories`, {
+            const url = `${getApiBaseUrl()}/categories`;
+            console.log('Fetching categories from:', url); // ← check this URL in browser console
+            console.log('Token:', token);                  // ← check token exists
+
+            const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });
+            console.log('Categories:', response.data);     // ← check what comes back
             if (response.data.success) {
                 setCategories(response.data.data);
             }
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            console.error('Categories error:', error.response?.status, error.response?.data);
         }
     };
-
     const fetchProduct = async () => {
         try {
             const token = localStorage.getItem('auth_token');
@@ -246,7 +250,7 @@ function ProductForm() {
                 {/* Price & Export Charges */}
                 <div className="form-row">
                     <div className="form-group half-width">
-                        <label>Product Price (USD) *</label>
+                        <label>Product Price (USD) </label>
                         <input
                             type="number"
                             name="price"
@@ -256,7 +260,6 @@ function ProductForm() {
                             placeholder="0.00"
                             step="0.01"
                             min="0"
-                            required
                         />
                     </div>
 

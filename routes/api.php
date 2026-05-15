@@ -22,6 +22,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\FooterLinkController;
 use App\Http\Controllers\Api\DiagnosticController;
+use App\Http\Controllers\Api\ProductController;
 
 // ============================================
 // PUBLIC ROUTES (NO AUTH REQUIRED)
@@ -80,6 +81,10 @@ Route::post('/bookings', [TableBookingController::class, 'store']); // Alias
 // Diagnostic routes
 Route::get('/diagnose', [DiagnosticController::class, 'diagnose']);
 Route::post('/test-upload', [DiagnosticController::class, 'testUpload']);
+
+// Products (Public)
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
 
 // ============================================
 // PROTECTED ROUTES (AUTH REQUIRED)
@@ -198,6 +203,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Mail Templates (Admin)
     Route::apiResource('mail-templates', MailTemplateController::class);
+
+    // Products (Admin)
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::post('/products/{id}', [ProductController::class, 'update']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 });
 
 // ============================================
