@@ -8,9 +8,8 @@ function ProductList() {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
 
-    // API Base URL helper
     const getApiBaseUrl = () => {
-        return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://127.0.0.1:8000/api'
             : 'https://pvtapp-production-255e.up.railway.app/api';
     };
@@ -22,8 +21,8 @@ function ProductList() {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('auth_token');
-            const apiBaseUrl = getApiBaseUrl();
-            const response = await axios.get(`${apiBaseUrl}/menu-items`, {
+            // ✅ Changed from /menu-items to /products
+            const response = await axios.get(`${getApiBaseUrl()}/products`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -42,8 +41,8 @@ function ProductList() {
 
         try {
             const token = localStorage.getItem('auth_token');
-            const apiBaseUrl = getApiBaseUrl();
-            const response = await axios.delete(`${apiBaseUrl}/menu-items/${id}`, {
+            // ✅ Changed from /menu-items to /products
+            const response = await axios.delete(`${getApiBaseUrl()}/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -60,25 +59,22 @@ function ProductList() {
     const toggleActive = async (id, currentStatus) => {
         try {
             const token = localStorage.getItem('auth_token');
-            const apiBaseUrl = getApiBaseUrl();
-            
-            // Use FormData for consistency with the controller
             const formData = new FormData();
             formData.append('is_active', !currentStatus ? '1' : '0');
             formData.append('_method', 'PUT');
-            
-            const response = await axios.post(`${apiBaseUrl}/menu-items/${id}`, formData, {
-                headers: { 
+
+            // ✅ Changed from /menu-items to /products
+            const response = await axios.post(`${getApiBaseUrl()}/products/${id}`, formData, {
+                headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
             if (response.data.success) {
-                // Update state immediately for better UX
-                setProducts(prevProducts => 
-                    prevProducts.map(product => 
-                        product.id === id 
+                setProducts(prevProducts =>
+                    prevProducts.map(product =>
+                        product.id === id
                             ? { ...product, is_active: !currentStatus }
                             : product
                     )
@@ -87,8 +83,7 @@ function ProductList() {
                 setTimeout(() => setMessage(''), 3000);
             }
         } catch (error) {
-            console.error('Error updating active status:', error);
-            console.error('Error details:', error.response?.data);
+            console.error('Error updating status:', error);
             setMessage('Failed to update product status');
             setTimeout(() => setMessage(''), 3000);
         }
@@ -96,13 +91,7 @@ function ProductList() {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return null;
-        
-        // If it's already a full URL (Cloudinary), return as is
-        if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-            return imagePath;
-        }
-        
-        // Otherwise, it's a local storage path
+        if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
         return `/storage/${imagePath}`;
     };
 
@@ -134,57 +123,58 @@ function ProductList() {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Brand</th>         {/* ✅ Added */}
+                                <th>Category</th>      {/* ✅ Added */}
+                                <th>Price</th>         {/* ✅ Added */}
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {products.length === 0 ? (
                                 <tr>
-                                    <td colSpan="3" className="empty-row">
-                                        No products found
-                                    </td>
+                                    <td colSpan="7" className="empty-row">No products found</td>
                                 </tr>
                             ) : (
                                 products.map((product, index) => (
                                     <tr key={product.id}>
                                         <td>{index + 1}</td>
                                         <td>
-                                            <div className="name-with-image">
-                                                {product.image ? (
-                                                    <img
-                                                        src={getImageUrl(product.image)}
-                                                        alt={product.name}
-                                                        className="table-image-square"
-                                                        onError={(e) => {
-                                                            if (e.target.src !== '/placeholder-image.jpg') {
-                                                                e.target.src = '/placeholder-image.jpg';
-                                                            }
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <div className="no-image-placeholder-square">No Image</div>
-                                                )}
-                                                <strong>{product.name}</strong>
-                                            </div>
+                                            {product.image ? (
+                                                <img
+                                                    src={getImageUrl(product.image)}
+                                                    alt={product.name}
+                                                    className="table-image-square"
+                                                    onError={(e) => {
+                                                        if (e.target.src !== '/placeholder-image.jpg') {
+                                                            e.target.src = '/placeholder-image.jpg';
+                                                        }
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div className="no-image-placeholder-square">No Image</div>
+                                            )}
                                         </td>
+                                        <td><strong>{product.name}</strong></td>
+                                        <td>{product.brand_name || '—'}</td>
+                                        <td>{product.category?.name || '—'}</td>
+                                        <td>${product.price}</td>
                                         <td>
                                             <div className="action-buttons">
                                                 <Link
                                                     to={`/staff/products/${product.id}/edit`}
                                                     className="action-btn edit-btn"
-                                                    title="Edit"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(product.id)}
                                                     className="action-btn delete-btn"
-                                                    title="Delete"
                                                 >
                                                     Delete
                                                 </button>
-                                                <label className="toggle-switch-small" title="Toggle Active Status">
+                                                <label className="toggle-switch-small" title="Toggle Active">
                                                     <input
                                                         type="checkbox"
                                                         checked={product.is_active}
