@@ -333,7 +333,7 @@ function Footer() {
             </div>
 
             {/* Footer Bottom */}
-            <div className="footer-elegant-bottom">
+            {/* <div className="footer-elegant-bottom">
                 <div className="footer-elegant-bottom-content">
                     <p className="footer-elegant-copyright">
                         © {new Date().getFullYear()} {settings?.site_name || 'Curry Leaf'}. All Rights Reserved | by{' '}
@@ -348,7 +348,7 @@ function Footer() {
                         </svg>
                     </button>
                 </div>
-            </div>
+            </div> */}
         </footer>
     );
 }

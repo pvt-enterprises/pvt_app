@@ -104,11 +104,31 @@ function Home() {
     };
 
     const handleNavClick = (item) => {
+        const url = item.url || item.link_url || '';
+
         if (item.target === '_blank') {
-            window.open(item.url, '_blank');
-        } else {
-            navigate(item.url);
+            window.open(url, '_blank');
+            return;
         }
+
+        // Hash scroll like /#about, /#footer, /#contact
+        if (url.startsWith('/#')) {
+            const sectionId = url.replace('/#', '');
+            if (window.location.pathname === '/') {
+                const el = document.getElementById(sectionId);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                navigate('/');
+                setTimeout(() => {
+                    const el = document.getElementById(sectionId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
+            return;
+        }
+
+        // Normal page navigation like /products
+        navigate(url);
     };
 
     // Collect non-empty stats
@@ -309,8 +329,12 @@ function Home() {
             <CategoriesSection id="categories" />
             <ProductsSection id="products" />
             <Deliverydetails id="delivery-details" />
-            <BookingFormContent />
-            <Footer />
+            <div id="contact">
+                <BookingFormContent />
+            </div>
+            <div id="footer">
+                <Footer />
+            </div>
             <WhatsAppButton phone={settings?.whatsapp_number || '876543219'} />
         </div>
     );
