@@ -16,6 +16,7 @@ import FooterLinksForm from './components/FooterLinks/FooterLinksForm';
 import GeneralSettings from './components/Settings/GeneralSettings';
 import DomainSettings from './components/DomainSettings/DomainSettings';
 import CategoryList from './components/Categories/CategoryList';
+import CategoryForm from './components/Categories/CategoryForm';
 import { getApiUrl } from './config/api';
 
 function AdminApp() {
