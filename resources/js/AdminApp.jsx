@@ -4,18 +4,8 @@ import axios from 'axios';
 import Login from './components/Auth/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import AdminLayout from './components/Layout/AdminLayout';
-import CategoryList from './components/Categories/CategoryList';
-import CategoryForm from './components/Categories/CategoryForm';
 import ProductList from './components/Products/ProductList';
 import ProductForm from './components/Products/ProductForm';
-import MenuItemList from './components/MenuItems/MenuItemList';
-import MenuItemForm from './components/MenuItems/MenuItemForm';
-import TeamMemberList from './components/TeamMembers/TeamMemberList';
-import TeamMemberForm from './components/TeamMembers/TeamMemberForm';
-import TestimonialList from './components/Testimonials/TestimonialList';
-import TestimonialForm from './components/Testimonials/TestimonialForm';
-import GalleryList from './components/Gallery/GalleryList';
-import GalleryForm from './components/Gallery/GalleryForm';
 import HeroBanner from './components/HeroBanner/HeroBanner';
 import PageList from './components/Pages/PageList';
 import PageForm from './components/Pages/PageForm';
@@ -25,18 +15,6 @@ import FooterLinksList from './components/FooterLinks/FooterLinksList';
 import FooterLinksForm from './components/FooterLinks/FooterLinksForm';
 import GeneralSettings from './components/Settings/GeneralSettings';
 import DomainSettings from './components/DomainSettings/DomainSettings';
-import BlogList from './components/Blogs/BlogList';
-import BlogForm from './components/Blogs/BlogForm';
-import BlogCategoryList from './components/BlogCategories/BlogCategoryList';
-import BlogCategoryForm from './components/BlogCategories/BlogCategoryForm';
-import MailTemplateList from './components/MailTemplates/MailTemplateList';
-import MailTemplateForm from './components/MailTemplates/MailTemplateForm';
-import RoleList from './components/Roles/RoleList';
-import RoleForm from './components/Roles/RoleForm';
-import UserList from './components/Users/UserList';
-import UserForm from './components/Users/UserForm';
-import UserResponseList from './components/UserResponses/UserResponseList';
-import TableBookingList from './components/TableBookings/TableBookingList';
 import { getApiUrl } from './config/api';
 
 function AdminApp() {
@@ -135,50 +113,11 @@ function AdminApp() {
                                 <Route path="products/create" element={<ProductForm />} />
                                 <Route path="products/:id/edit" element={<ProductForm />} />
                                 
-                                <Route path="menu-items" element={<MenuItemList />} />
-                                <Route path="menu-items/create" element={<MenuItemForm />} />
-                                <Route path="menu-items/:id/edit" element={<MenuItemForm />} />
-                                
-                                <Route path="team-members" element={<TeamMemberList />} />
-                                <Route path="team-members/create" element={<TeamMemberForm />} />
-                                <Route path="team-members/:id/edit" element={<TeamMemberForm />} />
-                                
-                                <Route path="gallery" element={<GalleryList />} />
-                                <Route path="gallery/create" element={<GalleryForm />} />
-                                <Route path="gallery/:id/edit" element={<GalleryForm />} />
-                                
-                                <Route path="testimonials" element={<TestimonialList />} />
-                                <Route path="testimonials/create" element={<TestimonialForm />} />
-                                <Route path="testimonials/:id/edit" element={<TestimonialForm />} />
-                                
-                                <Route path="user-responses" element={<UserResponseList />} />
-                                <Route path="table-bookings" element={<TableBookingList />} />
-                                
                                 <Route path="settings" element={<GeneralSettings />} />
                                 
                                 <Route path="footer-links" element={<FooterLinksList />} />
                                 <Route path="footer-links/create" element={<FooterLinksForm />} />
                                 <Route path="footer-links/:id/edit" element={<FooterLinksForm />} />
-                                
-                                <Route path="blog-categories" element={<BlogCategoryList />} />
-                                <Route path="blog-categories/create" element={<BlogCategoryForm />} />
-                                <Route path="blog-categories/:id/edit" element={<BlogCategoryForm />} />
-                                
-                                <Route path="blogs" element={<BlogList />} />
-                                <Route path="blogs/create" element={<BlogForm />} />
-                                <Route path="blogs/:id/edit" element={<BlogForm />} />
-                                
-                                <Route path="mail-templates" element={<MailTemplateList />} />
-                                <Route path="mail-templates/create" element={<MailTemplateForm />} />
-                                <Route path="mail-templates/:id/edit" element={<MailTemplateForm />} />
-                                
-                                <Route path="roles" element={<RoleList />} />
-                                <Route path="roles/create" element={<RoleForm />} />
-                                <Route path="roles/:id/edit" element={<RoleForm />} />
-                                
-                                <Route path="users" element={<UserList />} />
-                                <Route path="users/create" element={<UserForm />} />
-                                <Route path="users/:id/edit" element={<UserForm />} />
                                 
                                 {/* Redirect /staff to /staff/dashboard */}
                                 <Route path="/" element={<Navigate to="dashboard" replace />} />

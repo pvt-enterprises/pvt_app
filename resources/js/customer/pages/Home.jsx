@@ -5,8 +5,6 @@ import Sidebar from '../components/Sidebar';
 import WhatsAppButton from '../components/WhatsAppButton';
 import AboutUsSection from '../components/AboutUsSection';
 import Footer from '../components/Footer';
-import SpecialDishesSection from '../components/SpecialDishesSection';
-import ChefsSelectionSection from '../components/ChefsSelectionSection';
 import Deliverydetails from '../components/Deliverydetails';
 import { Link } from 'react-router-dom';
 import CategoriesSection from '../components/CategoriesSection';
