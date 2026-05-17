@@ -16,8 +16,8 @@ function CategoryProducts() {
     const fetchData = async () => {
         try {
             const [catRes, prodRes] = await Promise.all([
-                axios.get(`/api/categories/${id}`),
-                axios.get('/api/products')
+                axios.get(`/categories/${id}`),
+                axios.get('/products')
             ]);
             if (catRes.data.success) setCategory(catRes.data.data);
             if (prodRes.data.success) {

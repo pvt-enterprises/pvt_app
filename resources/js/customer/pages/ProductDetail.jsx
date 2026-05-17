@@ -14,7 +14,7 @@ function ProductDetail() {
 
     const fetchProduct = async () => {
         try {
-            const response = await axios.get(`/api/products/${id}`);
+            const response = await axios.get(`/products/${id}`);
             if (response.data.success) setProduct(response.data.data);
         } catch (error) {
             console.error('Error:', error);

@@ -16,8 +16,8 @@ function AllProducts() {
     const fetchData = async () => {
         try {
             const [prodRes, catRes] = await Promise.all([
-                axios.get('/api/products'),
-                axios.get('/api/categories')
+                axios.get('/products'),
+                axios.get('/categories')
             ]);
             if (prodRes.data.success) setProducts(prodRes.data.data);
             if (catRes.data.success) setCategories(catRes.data.data);

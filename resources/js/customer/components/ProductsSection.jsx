@@ -7,7 +7,7 @@ function ProductsSection({ id }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('/api/products')
+        axios.get('/products')
             .then(res => {
                 if (res.data.success) setProducts(res.data.data);
             })

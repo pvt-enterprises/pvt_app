@@ -7,7 +7,7 @@ function CategoriesSection({ id }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('/api/categories')
+        axios.get('/categories')
             .then(res => {
                 if (res.data.success) setCategories(res.data.data);
             })
