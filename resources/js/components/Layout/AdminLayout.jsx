@@ -16,16 +16,7 @@ function AdminLayout({ children, onLogout, username = "Super Admin", userEmail =
     ];
 
     const sections = [
-        {
-            title: 'USERS',
-            items: [
-                { label: 'Permissions', path: '/staff/permissions', emoji: '🔑' },
-                { label: 'Roles', path: '/staff/roles', emoji: '🕵️' },
-                { label: 'Users', path: '/staff/users', emoji: '👥' },
-                { label: 'User Responses', path: '/staff/user-responses', emoji: '💬' },
-                { label: 'Table Bookings', path: '/staff/table-bookings', emoji: '🍴' },
-            ]
-        },
+        
         {
             title: 'WEB PAGE',
             items: [
@@ -46,14 +37,7 @@ function AdminLayout({ children, onLogout, username = "Super Admin", userEmail =
                 { label: 'Pages', path: '/staff/pages', emoji: '📄' },
             ]
         },
-        {
-            title: 'CONTENT',
-            items: [
-                { label: 'Team Members', path: '/staff/team-members', emoji: '👥' },
-                { label: 'Testimonials', path: '/staff/testimonials', emoji: 'ℹ️' },
-                { label: 'Gallery Images', path: '/staff/gallery', emoji: '🎴' },
-            ]
-        },
+        
         {
             title: 'PRODUCTS',
             items: [
@@ -61,23 +45,7 @@ function AdminLayout({ children, onLogout, username = "Super Admin", userEmail =
                 { label: 'Products', path: '/staff/products', emoji: '🛒' },
             ]
         },
-        {
-            title: 'BLOG',
-            items: [
-                { 
-                    label: 'Blog Management', 
-                    path: '/staff/blog', 
-                    emoji: '📝',
-                    hasSubmenu: true,
-                    expandState: blogExpanded,
-                    setExpandState: setBlogExpanded,
-                    submenu: [
-                        { label: 'Categories', path: '/staff/blog-categories' },
-                        { label: 'Blogs', path: '/staff/blogs' },
-                    ]
-                },
-            ]
-        },
+       
         {
             title: 'MANAGEMENT',
             items: [

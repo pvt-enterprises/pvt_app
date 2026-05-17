@@ -8,6 +8,9 @@ import Footer from '../components/Footer';
 import SpecialDishesSection from '../components/SpecialDishesSection';
 import ChefsSelectionSection from '../components/ChefsSelectionSection';
 import Deliverydetails from '../components/Deliverydetails';
+import { Link } from 'react-router-dom';
+import CategoriesSection from '../components/CategoriesSection';
+import ProductsSection from '../components/ProductsSection';
 import BookingFormContent from '../components/BookingFormContent';
 import { getStorageUrl, extractArray } from '../../config/api';
 import './Home.css';
@@ -305,8 +308,8 @@ function Home() {
             {/* ── REST OF SECTIONS ── */}
             {/* <MenuSection id="menu" /> */}
             <AboutUsSection id="about" />
-            <SpecialDishesSection id="special-dishes" />
-            <ChefsSelectionSection id="chefs-selection" />
+            <CategoriesSection id="categories" />
+            <ProductsSection id="products" />
             <Deliverydetails id="delivery-details" />
             <BookingFormContent />
             <Footer />

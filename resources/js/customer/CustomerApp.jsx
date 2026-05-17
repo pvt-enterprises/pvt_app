@@ -12,12 +12,16 @@ import AboutPage from './pages/AboutPage';
 import PopupAd from './components/PopupAd';
 import OurChefsPage from './pages/OurChefsPage';
 
+// ✅ ADD THESE 3 IMPORTS
+import CategoryProducts from './pages/CategoryProducts';
+import ProductDetail from './pages/ProductDetail';
+import AllProducts from './pages/AllProducts';
+
 import './styles/customer.css';
 
 function CustomerApp() {
     return (
         <>
-            {/* Popup Ad - Shows on all customer pages */}
             <PopupAd />
             
             <Routes>
@@ -31,6 +35,11 @@ function CustomerApp() {
                 <Route path="/contact" element={<ContactUsPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/our-chefs" element={<OurChefsPage />} />
+
+                {/* ✅ ADD THESE 3 ROUTES */}
+                <Route path="/categories/:id/products" element={<CategoryProducts />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/products" element={<AllProducts />} />
             </Routes>
         </>
     );
