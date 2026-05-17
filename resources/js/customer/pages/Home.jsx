@@ -158,7 +158,7 @@ function Home() {
             {/* ── NAVBAR ── */}
             <nav
                 className="home-navbar"
-                style={{ backgroundColor: settings?.white_color || '#ffffff' }}
+                style={{ backgroundColor: settings?.white_color || '#ABDCAB' }}
             >
                 <div className="home-navbar__inner">
                     {/* Hamburger (mobile) */}
