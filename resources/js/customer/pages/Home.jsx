@@ -158,7 +158,7 @@ function Home() {
             {/* ── NAVBAR ── */}
             <nav
                 className="home-navbar"
-                style={{ backgroundColor: settings?.white_color || '#ABDCAB' }}
+                style={{ backgroundColor: settings?.white_color || '#92c86a' }}
             >
                 <div className="home-navbar__inner">
                     {/* Hamburger (mobile) */}
@@ -216,15 +216,15 @@ function Home() {
                 <div className="home-hero__deco">
                     <div
                         className="home-hero__deco-circle home-hero__deco-circle--1"
-                        style={{ borderColor: settings?.color_three || '#699b65' }}
+                        style={{ borderColor: settings?.color_eight || '#699b65' }}
                     />
                     <div
                         className="home-hero__deco-circle home-hero__deco-circle--2"
-                        style={{ borderColor: settings?.color_one || '#a7a7a7' }}
+                        style={{ borderColor: settings?.color_eight || '#a7a7a7' }}
                     />
                     <div
                         className="home-hero__deco-dots"
-                        style={{ color: settings?.color_three || '#699b65' }}
+                        style={{ color: settings?.color_eight || '#699b65' }}
                     >
                         {Array.from({ length: 20 }).map((_, i) => (
                             <span key={i} className="home-hero__dot" />
@@ -232,7 +232,7 @@ function Home() {
                     </div>
                     <div
                         className="home-hero__deco-line"
-                        style={{ backgroundColor: settings?.color_one || '#a7a7a7' }}
+                        style={{ backgroundColor: settings?.color_eight || '#a7a7a7' }}
                     />
                 </div>
 
@@ -242,7 +242,7 @@ function Home() {
                         {heroBanner?.subtitle && (
                             <p
                                 className="home-hero__small-heading"
-                                style={{ color: settings?.black_color || '#000000' }}
+                                style={{ color: settings?.color_seven || '#000000' }}
                             >
                                 {heroBanner.subtitle}
                             </p>
@@ -268,8 +268,8 @@ function Home() {
                             <button
                                 className="home-hero__btn home-hero__btn--primary"
                                 style={{
-                                    backgroundColor: settings?.color_one || '#a7a7a7',
-                                    color: settings?.white_color || '#ffffff',
+                                    backgroundColor: settings?.color_six || '#a7a7a7',
+                                    color: settings?.main_color || '#ffffff',
                                 }}
                                 onClick={() => navigate('/our-menus')}
                             >
@@ -278,8 +278,8 @@ function Home() {
                             <button
                                 className="home-hero__btn home-hero__btn--secondary"
                                 style={{
-                                    backgroundColor: settings?.color_eight || '#121111',
-                                    color: settings?.white_color || '#ffffff',
+                                    backgroundColor: settings?.main_color || '#121111',
+                                    color: settings?.color_three || '#ffffff',
                                 }}
                                 onClick={() => {
                                     const el = document.getElementById('about');

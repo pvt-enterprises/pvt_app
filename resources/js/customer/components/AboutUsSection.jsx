@@ -15,6 +15,8 @@ function AboutUsSection() {
         color_four: '#171819',
         color_eight: '#121111',
         black_color: '#000000',
+        white_color: '#ffffff',
+        main_color: '#184d5b',
     });
     const [loading, setLoading] = useState(true);
 
@@ -32,6 +34,8 @@ function AboutUsSection() {
                     color_four: data.color_four || '#171819',
                     color_eight: data.color_eight || '#121111',
                     black_color: data.black_color || '#000000',
+                    white_color:data.white_color || 'ffffff',
+                    main_color:data.main_color || '#184d5b',
                 });
                 if (data.default_image) setDefaultImage(data.default_image);
             }
@@ -123,17 +127,17 @@ function AboutUsSection() {
                             <div
                                 key={index}
                                 className="pvt-feature-box"
-                                style={{ backgroundColor: colors.color_eight }}
+                                style={{ backgroundColor: colors.white_color }}
                             >
                                 <p
                                     className="pvt-feature-title"
-                                    style={{ color: colors.color_one }}
+                                    style={{ color: colors.main_color }}
                                 >
                                     {feature.title}
                                 </p>
                                 <p
                                     className="pvt-feature-desc"
-                                    style={{ color: colors.color_one }}
+                                    style={{ color: colors.main_color }}
                                 >
                                     {feature.desc}
                                 </p>
