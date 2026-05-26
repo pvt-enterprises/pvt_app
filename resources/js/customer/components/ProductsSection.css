@@ -2,7 +2,7 @@
 .home-products-section {
   width: 100%;
   padding: 100px 80px;
-  background: var(--color-five);      /* slightly different bg from categories */
+  background: var(--main-color);      /* slightly different bg from categories */
 }
 
 .home-section-inner {
@@ -34,14 +34,14 @@
   display: inline-block;
   width: 28px;
   height: 2px;
-  background: var(--main-color);
+  background: var(--color-three);
   flex-shrink: 0;
 }
 
 .home-section-header h2 {
   font-size: 46px;
   font-weight: 700;
-  color: var(--heading-color);
+  color: var(--color-three);
   line-height: 1.12;
   margin-bottom: 14px;
 }
@@ -49,7 +49,7 @@
 .home-section-header p {
   font-size: 16px;
   font-weight: 300;
-  color: var(--color-one);
+  color: var(--color-two);
   line-height: 1.7;
 }
 
@@ -62,8 +62,8 @@
 
 /* ── Card ─────────────────────────────────────── */
 .home-product-card {
-  background: var(--color-seven);
-  border: 1px solid var(--color-four);
+  background: var(--color-five);
+  border: 1px solid var(--color-five);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
 
 .home-product-card:hover {
   transform: translateY(-4px);
-  border-color: var(--color-three);
+  border-color: var(--color-four);
 }
 
 /* ── Card Image ───────────────────────────────── */
@@ -81,7 +81,7 @@
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: var(--color-six);
+  background: var(--color-five);
   position: relative;
 }
 
@@ -108,7 +108,7 @@
 .home-product-card__body h3 {
   font-size: 16px;
   font-weight: 600;
-  color: var(--heading-color);
+  color: var(--color-three);
   margin-bottom: 6px;
   line-height: 1.35;
 }
@@ -119,14 +119,14 @@
   font-weight: 600;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: var(--main-color);           /* main_color: brand accent */
+  color: var(--color-two);           /* main_color: brand accent */
   margin-bottom: 12px;
 }
 
 /* ── Packaging / Description ──────────────────── */
 .home-product-desc {
   font-size: 13px;
-  color: var(--color-one);            /* color_one: muted text */
+  color: var(--color-two);            /* color_one: muted text */
   line-height: 1.65;
   flex: 1;
   margin-bottom: 0;
@@ -143,7 +143,7 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: var(--color-two);            /* color_two: dark bg for contrast */
+  color: var(--color-seven);            /* color_two: dark bg for contrast */
   background: var(--color-three);     /* color_three: green accent */
   text-decoration: none;
   width: fit-content;
@@ -151,7 +151,7 @@
 }
 
 .home-btn-details:hover {
-  background: var(--main-color);
+  background: var(--color-six);
   gap: 10px;
 }
 
@@ -171,7 +171,7 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: var(--heading-color);
+  color: var(--color-seven);
   background: transparent;
   border: 1.5px solid var(--color-three);
   text-decoration: none;
@@ -179,8 +179,8 @@
 }
 
 .home-btn-view-all:hover {
-  background: var(--color-three);
-  color: var(--color-two);
+  background: var(--color-six);
+  color: var(--color-seven);
   border-color: var(--color-three);
 }
 
