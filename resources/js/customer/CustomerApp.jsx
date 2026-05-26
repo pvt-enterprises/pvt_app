@@ -8,24 +8,26 @@ import ContactUsPage from './pages/ContactUsPage';
 import CategoryProducts from './pages/CategoryProducts';
 import ProductDetail from './pages/ProductDetail';
 import AllProducts from './pages/AllProducts';
+import { ThemeProvider } from './context/ThemeContext';
 
 import './styles/customer.css';
 
 function CustomerApp() {
     return (
         <>
-            
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/page/:slug" element={<PageView />} />
-                <Route path="/booking" element={<BookingPage />} />
-                <Route path="/contact" element={<ContactUsPage />} />
+            <ThemeProvider> 
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/page/:slug" element={<PageView />} />
+                    <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/contact" element={<ContactUsPage />} />
 
-                {/* ✅ ADD THESE 3 ROUTES */}
-                <Route path="/categories/:id/products" element={<CategoryProducts />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/products" element={<AllProducts />} />
-            </Routes>
+                    {/* ✅ ADD THESE 3 ROUTES */}
+                    <Route path="/categories/:id/products" element={<CategoryProducts />} />
+                    <Route path="/products/:id" element={<ProductDetail />} />
+                    <Route path="/products" element={<AllProducts />} />
+                </Routes>
+            </ThemeProvider>
         </>
     );
 }
