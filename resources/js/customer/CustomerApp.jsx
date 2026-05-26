@@ -4,8 +4,6 @@ import Home from './pages/Home';
 import PageView from './pages/PageView';
 import BookingPage from './pages/BookingPage';
 import ContactUsPage from './pages/ContactUsPage';
-import AboutPage from './pages/AboutPage';
-
 // ✅ ADD THESE 3 IMPORTS
 import CategoryProducts from './pages/CategoryProducts';
 import ProductDetail from './pages/ProductDetail';
@@ -22,7 +20,6 @@ function CustomerApp() {
                 <Route path="/page/:slug" element={<PageView />} />
                 <Route path="/booking" element={<BookingPage />} />
                 <Route path="/contact" element={<ContactUsPage />} />
-                <Route path="/about" element={<AboutPage />} />
 
                 {/* ✅ ADD THESE 3 ROUTES */}
                 <Route path="/categories/:id/products" element={<CategoryProducts />} />
