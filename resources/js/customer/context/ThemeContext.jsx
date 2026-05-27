@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';  // ← add React here
 import axios from 'axios';
 
 const ThemeContext = createContext(null);
