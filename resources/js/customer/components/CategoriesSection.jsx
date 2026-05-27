@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import { useTheme } from '../context/ThemeContext';
 import './CategoriesSection.css';
 
 function CategoriesSection({ id }) {
-    // const theme = useTheme();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState(null);
 
     useEffect(() => {
         axios.get('/categories')
@@ -16,6 +15,13 @@ function CategoriesSection({ id }) {
             })
             .catch(err => console.error('Error fetching categories:', err))
             .finally(() => setLoading(false));
+
+        axios.get('/settings')
+            .then(res => {
+                const data = res.data.data || res.data;
+                setSettings(data);
+            })
+            .catch(err => console.error('Error fetching settings:', err));
     }, []);
 
     const getImageUrl = (image) => {
@@ -23,22 +29,48 @@ function CategoriesSection({ id }) {
         return image.startsWith('http') ? image : `/storage/${image}`;
     };
 
-    if (loading) return <div className="section-loading">Loading categories...</div>;
+    if (loading) return (
+        <div className="section-loading"
+            style={{ background: settings?.color_six || '#1a1b1c',
+                     color: settings?.color_one || '#a7a7a7' }}>
+            Loading categories...
+        </div>
+    );
     if (categories.length === 0) return null;
 
     return (
-        <section id={id} className="home-categories-section">
+        <section
+            id={id}
+            className="home-categories-section"
+            style={{ backgroundColor: settings?.color_six || '#1a1b1c' }}
+        >
             <div className="home-section-inner">
 
                 <div className="home-section-header">
-                    <span className="home-section-eyebrow">What We Offer</span>
-                    <h2>Our Product Lines</h2>
-                    <p>Explore our wide range of export-quality product categories</p>
+                    <span
+                        className="home-section-eyebrow"
+                        style={{ color: settings?.color_three || '#699b65' }}
+                    >
+                        What We Offer
+                    </span>
+                    <h2 style={{ color: settings?.heading_color || '#ffffff' }}>
+                        Our Product Lines
+                    </h2>
+                    <p style={{ color: settings?.color_one || '#a7a7a7' }}>
+                        Explore our wide range of export-quality product categories
+                    </p>
                 </div>
 
                 <div className="home-categories-grid">
                     {categories.map(category => (
-                        <div className="home-category-card" key={category.id}>
+                        <div
+                            className="home-category-card"
+                            key={category.id}
+                            style={{
+                                backgroundColor: settings?.color_seven || '#151616',
+                                borderColor: settings?.color_five || '#0c0d0c',
+                            }}
+                        >
                             <div className="home-category-card__image">
                                 <img
                                     src={getImageUrl(category.image)}
@@ -47,11 +79,16 @@ function CategoriesSection({ id }) {
                                 />
                             </div>
                             <div className="home-category-card__body">
-                                <h3>{category.name}</h3>
-                                <p>{category.description || 'Quality products for global export.'}</p>
+                                <h3 style={{ color: settings?.heading_color || '#ffffff' }}>
+                                    {category.name}
+                                </h3>
+                                <p style={{ color: settings?.text_color || '#a7a7a7' }}>
+                                    {category.description || 'Quality products for global export.'}
+                                </p>
                                 <Link
                                     to={`/categories/${category.id}/products`}
                                     className="home-btn-explore"
+                                    style={{ color: settings?.color_three || '#699b65' }}
                                 >
                                     Explore Now →
                                 </Link>

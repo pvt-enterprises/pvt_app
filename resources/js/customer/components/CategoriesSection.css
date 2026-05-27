@@ -1,163 +1,150 @@
 /* ── Section ──────────────────────────────────── */
 .home-categories-section {
-  width: 100%;
-  padding: 100px 80px;
-  background: var(--main-color);       /* color_six: section bg */
+    width: 100%;
+    padding: 100px 80px;
 }
 
 .home-section-inner {
-  max-width: 1280px;
-  margin: 0 auto;
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
-/* ── Left-aligned Header ──────────────────────── */
+/* ── Header ───────────────────────────────────── */
 .home-section-header {
-  margin-bottom: 56px;
-  text-align: left;                   /* explicit left alignment */
-  max-width: 600px;                   /* keeps text tight on left */
+    margin-bottom: 56px;
+    text-align: left;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .home-section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--color-three);          /* color_three: green accent */
-  margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
 }
 
 .home-section-eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 2px;
-  background: var(--color-three);      /* main_color: primary accent */
-  flex-shrink: 0;
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: currentColor;
+    flex-shrink: 0;
 }
 
 .home-section-header h2 {
-  font-size: 46px;
-  font-weight: 700;
-  color: var(--color-three);        /* heading_color */
-  line-height: 1.12;
-  margin-bottom: 14px;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.12;
+    margin: 0;
 }
 
 .home-section-header p {
-  font-size: 16px;
-  font-weight: 300;
-  color: var(--color-two);            /* color_one: muted/secondary text */
-  line-height: 1.7;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin: 0;
 }
 
 /* ── Grid ─────────────────────────────────────── */
 .home-categories-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
 }
 
 /* ── Card ─────────────────────────────────────── */
 .home-category-card {
-  background: var(--color-five);     /* color_seven: card bg */
-  border: 1px solid var(--color-five);
-  display: flex;
-  flex-direction: column;
-  transition: background 0.25s ease;
-  cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    transition: opacity 0.25s ease;
+    cursor: pointer;
 }
 
-.home-category-card:hover {
-  background: var(--color-four);     /* color_four: hover bg */
-}
+.home-category-card:hover { opacity: 0.9; }
 
 /* ── Card Image ───────────────────────────────── */
 .home-category-card__image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-bottom: 2px solid var(--color-five);
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
 }
 
 .home-category-card__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.35s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
 }
 
 .home-category-card:hover .home-category-card__image img {
-  transform: scale(1.04);
+    transform: scale(1.04);
 }
 
 /* ── Card Body ────────────────────────────────── */
 .home-category-card__body {
-  padding: 28px 30px 32px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+    padding: 28px 30px 32px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .home-category-card__body h3 {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--color-three);        /* heading_color */
-  margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
 }
 
 .home-category-card__body p {
-  font-size: 13.5px;
-  color: var(--color-two);           /* text_color */
-  line-height: 1.65;
-  flex: 1;
+    font-size: 13.5px;
+    line-height: 1.65;
+    flex: 1;
 }
 
 /* ── CTA Link ─────────────────────────────────── */
 .home-btn-explore {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 22px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-seven);          /* color_three: green accent */
-  text-decoration: none;
-  letter-spacing: 0.2px;
-  transition: gap 0.2s ease, color 0.2s ease;
-  width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 22px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.2px;
+    transition: gap 0.2s ease;
+    width: fit-content;
 }
 
-.home-btn-explore:hover {
-  gap: 10px;
-  color: var(--color-six);           /* main_color: primary on hover */
-}
+.home-btn-explore:hover { gap: 10px; }
 
 /* ── Loading ──────────────────────────────────── */
 .section-loading {
-  width: 100%;
-  padding: 100px 80px;
-  background: var(--color-six);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--color-one);
-  letter-spacing: 0.5px;
+    width: 100%;
+    padding: 100px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 1024px) {
-  .home-categories-grid { grid-template-columns: repeat(2, 1fr); }
-  .home-categories-section { padding: 80px 40px; }
+    .home-categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .home-categories-section { padding: 80px 40px; }
 }
 
 @media (max-width: 640px) {
-  .home-categories-grid { grid-template-columns: 1fr; gap: 1px; }
-  .home-categories-section { padding: 60px 20px; }
-  .home-section-header h2 { font-size: 32px; }
+    .home-categories-grid { grid-template-columns: 1fr; gap: 1px; }
+    .home-categories-section { padding: 60px 20px; }
+    .home-section-header h2 { font-size: 32px; }
 }
