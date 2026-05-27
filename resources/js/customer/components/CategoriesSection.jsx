@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useTheme } from '../context/ThemeContext';
+// import { useTheme } from '../context/ThemeContext';
 import './CategoriesSection.css';
 
 function CategoriesSection({ id }) {
-    const theme = useTheme();
+    // const theme = useTheme();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
