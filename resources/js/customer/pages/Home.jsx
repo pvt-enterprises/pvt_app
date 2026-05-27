@@ -31,32 +31,43 @@ function Home() {
     // Apply theme colors from domain settings
     useEffect(() => {
         if (!settings) return;
-        const root = document.documentElement.style;
 
-        // shorthand names (used by Home.jsx inline styles)
-        if (settings.main_color)    root.setProperty('--main-color',    settings.main_color);
-        if (settings.white_color)   root.setProperty('--white-color',   settings.white_color);
-        if (settings.black_color)   root.setProperty('--black-color',   settings.black_color);
-        if (settings.text_color)    root.setProperty('--text-color',    settings.text_color);
-        if (settings.heading_color) root.setProperty('--heading-color', settings.heading_color);
-        if (settings.color_one)     root.setProperty('--color-1',       settings.color_one);
-        if (settings.color_two)     root.setProperty('--color-2',       settings.color_two);
-        if (settings.color_three)   root.setProperty('--color-3',       settings.color_three);
-        if (settings.color_four)    root.setProperty('--color-4',       settings.color_four);
-        if (settings.color_five)    root.setProperty('--color-5',       settings.color_five);
-        if (settings.color_six)     root.setProperty('--color-6',       settings.color_six);
-        if (settings.color_seven)   root.setProperty('--color-7',       settings.color_seven);
-        if (settings.color_eight)   root.setProperty('--color-8',       settings.color_eight);
+        // Remove old theme tag if it exists
+        const existing = document.getElementById('pvt-theme-vars');
+        if (existing) existing.remove();
 
-        // full-word names (used by CategoriesSection, ProductsSection, DeliveryDetails, BookingForm CSS)
-        if (settings.color_one)     root.setProperty('--color-one',     settings.color_one);
-        if (settings.color_two)     root.setProperty('--color-two',     settings.color_two);
-        if (settings.color_three)   root.setProperty('--color-three',   settings.color_three);
-        if (settings.color_four)    root.setProperty('--color-four',    settings.color_four);
-        if (settings.color_five)    root.setProperty('--color-five',    settings.color_five);
-        if (settings.color_six)     root.setProperty('--color-six',     settings.color_six);
-        if (settings.color_seven)   root.setProperty('--color-seven',   settings.color_seven);
-        if (settings.color_eight)   root.setProperty('--color-eight',   settings.color_eight);
+        // Inject a <style> tag into <head> — most reliable way to set CSS vars
+        const style = document.createElement('style');
+        style.id = 'pvt-theme-vars';
+        style.textContent = `
+            :root {
+                --main-color:    ${settings.main_color    || '#e4e590'};
+                --white-color:   ${settings.white_color   || '#ffffff'};
+                --black-color:   ${settings.black_color   || '#000000'};
+                --text-color:    ${settings.text_color    || '#ffffff'};
+                --heading-color: ${settings.heading_color || '#ffffff'};
+
+                --color-one:     ${settings.color_one     || '#a7a7a7'};
+                --color-two:     ${settings.color_two     || '#0e0d0b'};
+                --color-three:   ${settings.color_three   || '#699b65'};
+                --color-four:    ${settings.color_four    || '#171819'};
+                --color-five:    ${settings.color_five    || '#0c0d0c'};
+                --color-six:     ${settings.color_six     || '#1a1b1c'};
+                --color-seven:   ${settings.color_seven   || '#151616'};
+                --color-eight:   ${settings.color_eight   || '#121111'};
+
+                --color-1:       ${settings.color_one     || '#a7a7a7'};
+                --color-2:       ${settings.color_two     || '#0e0d0b'};
+                --color-3:       ${settings.color_three   || '#699b65'};
+                --color-4:       ${settings.color_four    || '#171819'};
+                --color-5:       ${settings.color_five    || '#0c0d0c'};
+                --color-6:       ${settings.color_six     || '#1a1b1c'};
+                --color-7:       ${settings.color_seven   || '#151616'};
+                --color-8:       ${settings.color_eight   || '#121111'};
+            }
+        `;
+        document.head.appendChild(style);
+
     }, [settings]);
     const fetchSettings = async () => {
         try {
@@ -91,7 +102,7 @@ function Home() {
             setMenuItems([]);
         }
     };
-
+ 
     const fetchStats = async () => {
         try {
             const response = await axios.get('/settings');
