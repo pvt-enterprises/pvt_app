@@ -42,7 +42,7 @@ function CategoriesSection({ id }) {
         <section
             id={id}
             className="home-categories-section"
-            style={{ backgroundColor: settings?.color_six || '#1a1b1c' }}
+            style={{ backgroundColor: settings?.main_color || '#1a1b1c' }}
         >
             <div className="home-section-inner">
 
@@ -53,10 +53,10 @@ function CategoriesSection({ id }) {
                     >
                         What We Offer
                     </span>
-                    <h2 style={{ color: settings?.heading_color || '#ffffff' }}>
+                    <h2 style={{ color: settings?.color_three || '#ffffff' }}>
                         Our Product Lines
                     </h2>
-                    <p style={{ color: settings?.color_one || '#a7a7a7' }}>
+                    <p style={{ color: settings?.color_two || '#a7a7a7' }}>
                         Explore our wide range of export-quality product categories
                     </p>
                 </div>
@@ -67,7 +67,7 @@ function CategoriesSection({ id }) {
                             className="home-category-card"
                             key={category.id}
                             style={{
-                                backgroundColor: settings?.color_seven || '#151616',
+                                backgroundColor: settings?.color_five || '#151616',
                                 borderColor: settings?.color_five || '#0c0d0c',
                             }}
                         >
@@ -79,16 +79,16 @@ function CategoriesSection({ id }) {
                                 />
                             </div>
                             <div className="home-category-card__body">
-                                <h3 style={{ color: settings?.heading_color || '#ffffff' }}>
+                                <h3 style={{ color: settings?.color_three || '#ffffff' }}>
                                     {category.name}
                                 </h3>
-                                <p style={{ color: settings?.text_color || '#a7a7a7' }}>
+                                <p style={{ color: settings?.color_two|| '#a7a7a7' }}>
                                     {category.description || 'Quality products for global export.'}
                                 </p>
                                 <Link
                                     to={`/categories/${category.id}/products`}
                                     className="home-btn-explore"
-                                    style={{ color: settings?.color_three || '#699b65' }}
+                                    style={{ color: settings?.color_six || '#699b65' }}
                                 >
                                     Explore Now →
                                 </Link>
