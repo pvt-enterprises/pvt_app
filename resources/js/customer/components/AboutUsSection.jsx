@@ -94,14 +94,14 @@ function AboutUsSection() {
 
                     <p
                         className="pvt-who-label"
-                        style={{ color: colors.color_four }}
+                        style={{ color: colors.main_color }}
                     >
                         Who we are
                     </p>
 
                     <h2
                         className="pvt-tagline"
-                        style={{ color: colors.black_color }}
+                        style={{ color: colors.main_color  }}
                     >
                         Built on trust, driven by quality
                     </h2>
@@ -137,7 +137,7 @@ function AboutUsSection() {
                                 </p>
                                 <p
                                     className="pvt-feature-desc"
-                                    style={{ color: colors.main_color }}
+                                    style={{ color: colors.color_one }}
                                 >
                                     {feature.desc}
                                 </p>

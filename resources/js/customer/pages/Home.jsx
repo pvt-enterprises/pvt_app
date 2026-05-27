@@ -176,7 +176,7 @@ function Home() {
                             <img src={getLogoUrl()} alt={settings?.site_name || 'Logo'} />
                         ) : (
                             <span style={{ color: settings?.black_color || '#000', fontWeight: 600, fontSize: '1.2rem' }}>
-                                {settings?.site_name || 'Restaurant'}
+                                {settings?.site_name || 'PVT Enterprises'}
                             </span>
                         )}
                     </div>

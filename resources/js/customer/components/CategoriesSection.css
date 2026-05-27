@@ -34,7 +34,7 @@
   display: inline-block;
   width: 28px;
   height: 2px;
-  background: var(--main-color);      /* main_color: primary accent */
+  background: var(--color-three);      /* main_color: primary accent */
   flex-shrink: 0;
 }
 

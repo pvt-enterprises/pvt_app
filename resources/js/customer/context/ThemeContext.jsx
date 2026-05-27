@@ -13,7 +13,7 @@ export function ThemeProvider({ children }) {
                     const s = res.data.data;
                     const root = document.documentElement;
 
-                    root.style.setProperty('--main-color',    s.main_color    ?? '#e4e590');
+                    root.style.setProperty('--main-color',    s.main_color    ?? '#184d5b');
                     root.style.setProperty('--white-color',   s.white_color   ?? '#ffffff');
                     root.style.setProperty('--color-one',     s.color_one     ?? '#a7a7a7');
                     root.style.setProperty('--color-two',     s.color_two     ?? '#0e0d0b');
