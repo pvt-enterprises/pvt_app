@@ -109,14 +109,14 @@ function BookingFormContent() {
 
                     <h1
                         className="bc-heading"
-                        style={{ color: s?.color_two || '#0e0d0b' }}
+                        style={{ color: s?.main_color || '#e4e590' }}
                     >
                         Get in Touch
                     </h1>
 
                     <p
                         className="bc-sub"
-                        style={{ color: s?.color_one || '#a7a7a7' }}
+                        style={{ color: s?.main_color || '#e4e590' }}
                     >
                         {s?.short_about || 'Whether you are a distributor, pharmacy chain, or healthcare provider — we would love to hear from you.'}
                     </p>
@@ -136,17 +136,17 @@ function BookingFormContent() {
                                 <div>
                                     <p
                                         className="bc-contact-label"
-                                        style={{ color: s?.main_color || '#e4e590' }}
+                                        style={{ color: s?.color_six || '#e4e590' }}
                                     >
                                         {item.label}
                                     </p>
                                     {item.href
                                         ? <a href={item.href} className="bc-contact-value"
-                                            style={{ color: s?.color_two || '#0e0d0b' }}>
+                                            style={{ color: s?.main_color || '#0e0d0b' }}>
                                             {item.value}
                                           </a>
                                         : <p className="bc-contact-value"
-                                            style={{ color: s?.color_two || '#0e0d0b' }}>
+                                            style={{ color: s?.main_color || '#0e0d0b' }}>
                                             {item.value}
                                           </p>
                                     }
@@ -161,8 +161,8 @@ function BookingFormContent() {
                     <div
                         className="bc-form-card"
                         style={{
-                            backgroundColor: s?.color_eight || '#f6f9fa',
-                            borderColor: s?.color_one || '#e2eaec',
+                            backgroundColor: s?.white_color || '#f6f9fa',
+                            borderColor: s?.main_color || '#e2eaec',
                         }}
                     >
                         {message && (
@@ -172,7 +172,7 @@ function BookingFormContent() {
                                     backgroundColor: message.includes('success')
                                         ? s?.color_three || '#699b65'
                                         : '#c0392b',
-                                    color: s?.white_color || '#ffffff',
+                                    color: s?.black_color || '#ffffff',
                                 }}
                             >
                                 {message}
@@ -184,7 +184,7 @@ function BookingFormContent() {
                                 <div className="bc-field">
                                     <label
                                         className="bc-label"
-                                        style={{ color: s?.color_two || '#0e0d0b' }}
+                                        style={{ color: s?.main_color|| '#0e0d0b' }}
                                     >
                                         First Name
                                     </label>
@@ -207,7 +207,7 @@ function BookingFormContent() {
                                 <div className="bc-field">
                                     <label
                                         className="bc-label"
-                                        style={{ color: s?.color_two || '#0e0d0b' }}
+                                        style={{ color: s?.main_color || '#0e0d0b' }}
                                     >
                                         Last Name
                                     </label>
@@ -229,7 +229,7 @@ function BookingFormContent() {
                             </div>
 
                             <div className="bc-field">
-                                <label className="bc-label" style={{ color: s?.color_two || '#0e0d0b' }}>
+                                <label className="bc-label" style={{ color: s?.main_color || '#0e0d0b' }}>
                                     Email Address
                                 </label>
                                 <input
@@ -294,8 +294,8 @@ function BookingFormContent() {
                                 disabled={loading}
                                 className="bc-btn-submit"
                                 style={{
-                                    backgroundColor: s?.color_two || '#0e0d0b',
-                                    color: s?.white_color || '#ffffff',
+                                    backgroundColor: s?.main_color || '#0e0d0b',
+                                    color: s?.color_three || '#ffffff',
                                 }}
                             >
                                 {loading ? 'Submitting...' : 'Send Enquiry →'}

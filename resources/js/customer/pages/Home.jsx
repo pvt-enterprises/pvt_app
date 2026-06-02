@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import WhatsAppButton from '../components/WhatsAppButton';
 import AboutUsSection from '../components/AboutUsSection';
 import Footer from '../components/Footer';
-import Deliverydetails from '../components/Deliverydetails';
+// import Deliverydetails from '../components/Deliverydetails';
 import { Link } from 'react-router-dom';
 import CategoriesSection from '../components/CategoriesSection';
 import ProductsSection from '../components/ProductsSection';
@@ -350,7 +350,7 @@ function Home() {
             <AboutUsSection id="about" />
             <CategoriesSection id="categories" />
             <ProductsSection id="products" />
-            <Deliverydetails id="delivery-details" settings={settings} />
+            {/* <Deliverydetails id="delivery-details" settings={settings} /> */}
             <div id="contact">
                 <BookingFormContent />
             </div>

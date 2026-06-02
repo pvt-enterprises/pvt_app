@@ -98,7 +98,7 @@ function Footer() {
     };
 
     const s = settings;
-    const footerBg      = s?.color_two   || '#0e0d0b';
+    const footerBg      = s?.black_color   || '#000000';
     const accentColor   = s?.main_color  || '#e4e590';
     const textMuted     = s?.color_one   || '#a7a7a7';
     const textBright    = s?.white_color || '#ffffff';
