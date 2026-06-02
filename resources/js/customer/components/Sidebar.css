@@ -1,50 +1,47 @@
+/* ── Overlay ─────────────────────────────────────────────── */
 .sidebar-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
     z-index: 9998;
-    animation: fadeIn 0.3s ease;
+    animation: sbFadeIn 0.25s ease;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+@keyframes sbFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
+/* ── Sidebar panel ───────────────────────────────────────── */
 .sidebar {
     position: fixed;
     top: 0;
-    left: -400px;
-    width: 400px;
+    left: -420px;
+    width: 380px;
     height: 100vh;
-    background-color: #0a0a0a;
+    background-color: var(--sb-bg, #0a0a0a);
     z-index: 9999;
     transition: left 0.3s ease;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.6);
+    /* NO overflow-y: auto — we want no scrolling */
+    overflow: hidden;
 }
 
 .sidebar-open {
     left: 0;
 }
 
+/* ── Close button ────────────────────────────────────────── */
 .sidebar-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 18px;
+    right: 18px;
     background: transparent;
     border: none;
-    color: var(--main-color, #e4e590);
-    font-size: 36px;
+    color: var(--sb-accent, #e4e590);
+    font-size: 32px;
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -52,197 +49,154 @@
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease;
+    z-index: 1;
 }
 
 .sidebar-close:hover {
     transform: rotate(90deg);
 }
 
+/* ── Nav — takes all available space ─────────────────────── */
 .sidebar-nav {
     flex: 1;
-    padding: 80px 40px 40px;
+    padding: 72px 36px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* vertically centre the menu links */
 }
 
 .sidebar-section-title {
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--main-color, #e4e590);
-    margin-bottom: 20px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--sb-accent, #e4e590);
+    margin-bottom: 24px;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
+    opacity: 0.7;
 }
 
+/* ── Menu links — BIG and focused ───────────────────────── */
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
-    padding: 15px 0;
+    padding: 14px 0;
     background: transparent;
     border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     color: #ffffff;
-    font-size: 16px;
+    font-size: 1.25rem;
+    font-weight: 500;
     text-align: left;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.25s ease;
+    letter-spacing: 0.02em;
+}
+
+.sidebar-link:last-child {
+    border-bottom: none;
 }
 
 .sidebar-link:hover {
-    color: var(--main-color, #e4e590);
-    padding-left: 10px;
+    color: var(--sb-accent, #e4e590);
+    padding-left: 8px;
 }
 
 .sidebar-link .diamond {
-    color: var(--main-color, #e4e590);
-    font-size: 14px;
-    transition: transform 0.3s ease;
+    color: var(--sb-accent, #e4e590);
+    font-size: 10px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
 }
 
 .sidebar-link:hover .diamond {
-    transform: translateX(5px);
+    transform: translateX(4px);
 }
 
-.sidebar-divider {
-    height: 1px;
-    background: linear-gradient(
-        to right,
-        transparent,
-        var(--main-color, #e4e590),
-        transparent
-    );
-    margin: 30px 0;
-    opacity: 0.5;
+.sidebar-link-highlight {
+    /* no extra background — keep it clean, links are already prominent */
 }
 
+.no-links-message {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+}
+
+/* ── Footer — compact, no scroll needed ─────────────────── */
 .sidebar-footer {
-    background-color: #050505;
-    padding: 40px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 36px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    background-color: rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .sidebar-footer h3 {
-    font-size: 20px;
-    color: var(--main-color, #e4e590);
-    margin-bottom: 20px;
-    font-family: 'Playfair Display', serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: var(--sb-accent, #e4e590);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 8px;
+    opacity: 0.7;
 }
 
 .sidebar-address,
 .sidebar-timing,
 .sidebar-email {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 12px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .sidebar-divider-small {
     height: 1px;
-    background: var(--main-color, #e4e590);
-    margin: 25px 0;
-    opacity: 0.3;
+    background: var(--sb-accent, #e4e590);
+    margin: 10px 0;
+    opacity: 0.2;
 }
 
 .booking-label {
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 2px;
-    color: var(--main-color, #e4e590);
-    margin-bottom: 10px;
+    color: var(--sb-accent, #e4e590);
     text-transform: uppercase;
+    margin: 0;
+    opacity: 0.7;
 }
 
 .sidebar-phone {
-    display: inline-block;
     color: #ffffff;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.25s ease;
 }
 
 .sidebar-phone:hover {
-    color: var(--main-color, #e4e590);
+    color: var(--sb-accent, #e4e590);
 }
 
-/* Scrollbar Styling */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: #0a0a0a;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: var(--main-color, #e4e590);
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: #d4d580;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 480px) {
     .sidebar {
-        width: 320px;
-        left: -320px;
+        width: 300px;
+        left: -300px;
     }
 
     .sidebar-nav {
-        padding: 70px 30px 30px;
+        padding: 64px 24px 20px;
     }
 
     .sidebar-footer {
-        padding: 30px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .sidebar {
-        width: 280px;
-        left: -280px;
-    }
-
-    .sidebar-nav {
-        padding: 60px 20px 20px;
-    }
-
-    .sidebar-footer {
-        padding: 25px 20px;
+        padding: 16px 24px;
     }
 
     .sidebar-link {
-        font-size: 15px;
+        font-size: 1.1rem;
+        padding: 12px 0;
     }
-}
-/* Add these new styles to your existing Sidebar.css */
-
-.sidebar-link-highlight {
-    background: linear-gradient(135deg, rgba(228, 229, 144, 0.15) 0%, rgba(228, 229, 144, 0.05) 100%);
-    border-left: 3px solid var(--main-color, #e4e590);
-    padding-left: 15px;
-    font-weight: 500;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-.sidebar-link-highlight:hover {
-    background: linear-gradient(135deg, rgba(228, 229, 144, 0.25) 0%, rgba(228, 229, 144, 0.1) 100%);
-    border-left-color: #f4f5a0;
-    padding-left: 20px;
-}
-
-.sidebar-link-highlight .diamond {
-    color: var(--main-color, #e4e590);
-    font-size: 16px;
-}
-
-/* Override divider for better spacing */
-.sidebar-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, var(--main-color, #e4e590) 50%, transparent 100%);
-    margin: 25px 0;
-    opacity: 0.3;
 }

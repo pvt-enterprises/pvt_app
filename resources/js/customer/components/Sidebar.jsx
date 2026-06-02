@@ -8,14 +8,18 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
     const navigate = useNavigate();
     const [topMenuLinks, setTopMenuLinks] = useState([]);
     const [pages, setPages] = useState({});
-    
+
+    /* Inject sidebar-specific CSS variables from dashboard settings */
+    const sidebarVars = {
+        '--sb-bg':     settings?.color_eight || settings?.color_one || '#0a0a0a',
+        '--sb-accent': settings?.main_color  || '#e4e590',
+        '--sb-text':   settings?.white_color || '#ffffff',
+    };
+
     useEffect(() => {
         if (isOpen) {
-            // Reset state first to ensure fresh data
             setTopMenuLinks([]);
             setPages({});
-            
-            // Then fetch fresh data
             fetchTopMenuLinks();
             fetchPages();
         }
@@ -23,42 +27,14 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
 
     const fetchTopMenuLinks = async () => {
         try {
-            console.log('🔍 FETCH: Starting to fetch menu links...');
             const response = await axios.get('/menu-links');
-            console.log('🔍 FETCH: Raw API response:', response.data);
-            
             const allLinks = extractArray(response);
-            console.log('🔍 FETCH: All links after extractArray:', allLinks);
-            console.log('🔍 FETCH: Total links count:', allLinks.length);
-            
-            // Log each link in detail
-            allLinks.forEach((link, index) => {
-                console.log(`🔍 FETCH: Link ${index + 1}:`, {
-                    id: link.id,
-                    title: link.title,
-                    link_text: link.link_text,
-                    is_active: link.is_active,
-                    link_type: link.link_type,
-                    url: link.url
-                });
-            });
-            
-            // Filter only active top menu links and sort by order
             const activeTopLinks = allLinks
-                .filter(link => {
-                    const matches = link.is_active && link.link_type === 'top_menu';
-                    console.log(`🔍 FILTER: Link "${link.title}" - is_active: ${link.is_active}, link_type: "${link.link_type}", matches: ${matches}`);
-                    return matches;
-                })
+                .filter(link => link.is_active && link.link_type === 'top_menu')
                 .sort((a, b) => a.order - b.order);
-            
-            console.log('🔍 FILTER: Filtered top menu links:', activeTopLinks);
-            console.log('🔍 FILTER: Final count:', activeTopLinks.length);
-            
             setTopMenuLinks(activeTopLinks);
-            console.log('✅ FETCH: Top Menu Links Set!');
         } catch (error) {
-            console.error('❌ FETCH ERROR:', error);
+            console.error('Error fetching menu links:', error);
             setTopMenuLinks([]);
         }
     };
@@ -67,13 +43,8 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
         try {
             const response = await axios.get('/pages');
             const allPages = extractArray(response);
-            
-            // Create a map of pages by ID for easy lookup
             const pagesMap = {};
-            allPages.forEach(page => {
-                pagesMap[page.id] = page;
-            });
-            
+            allPages.forEach(page => { pagesMap[page.id] = page; });
             setPages(pagesMap);
         } catch (error) {
             console.error('Error fetching pages:', error);
@@ -82,71 +53,59 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
     };
 
     const handleTopMenuLinkClick = (link) => {
-        // Handle CMS Page link (page_id exists)
         if (link.page_id && pages[link.page_id]) {
             const page = pages[link.page_id];
             navigate(`/page/${page.slug}`, { state: { page } });
             onClose();
             return;
         }
-        
-        // Handle Custom URL (hardcoded pages)
+
         if (link.url) {
-            // Check if URL starts with # (internal section/anchor)
             if (link.url.startsWith('#')) {
                 const sectionId = link.url.replace('#', '');
                 navigate('/');
                 setTimeout(() => {
-                    const element = document.getElementById(sectionId);
-                    if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                    }
+                    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
                 }, 100);
                 onClose();
                 return;
             }
-            
-            // Check if URL starts with / (internal route)
             if (link.url.startsWith('/')) {
                 navigate(link.url);
                 onClose();
                 return;
             }
-            
-            // External URL
             if (link.url !== '#') {
-                if (link.target === '_blank') {
-                    window.open(link.url, '_blank');
-                } else {
-                    window.location.href = link.url;
-                }
+                link.target === '_blank'
+                    ? window.open(link.url, '_blank')
+                    : (window.location.href = link.url);
                 onClose();
                 return;
             }
         }
-        
         onClose();
     };
 
     return (
         <>
-            {/* Overlay */}
-            {isOpen && <div className="sidebar-overlay" onClick={onClose}></div>}
+            {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
 
-            {/* Sidebar */}
-            <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
+            <div
+                className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}
+                style={sidebarVars}
+            >
                 <button className="sidebar-close" onClick={onClose}>×</button>
-                
+
+                {/* ── Menu links — primary focus ───────────────── */}
                 <nav className="sidebar-nav">
-                    <h3 className="sidebar-section-title">Menu</h3>
-                    
-                    {/* Dynamic Top Menu Links from Database ONLY */}
+                    <p className="sidebar-section-title">Menu</p>
+
                     {topMenuLinks.length > 0 ? (
-                        topMenuLinks.map((link) => (
+                        topMenuLinks.map(link => (
                             <button
                                 key={link.id}
-                                onClick={() => handleTopMenuLinkClick(link)}
                                 className="sidebar-link sidebar-link-highlight"
+                                onClick={() => handleTopMenuLinkClick(link)}
                             >
                                 <span className="diamond">◆</span>
                                 {link.link_text || link.title}
@@ -157,30 +116,33 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
                     )}
                 </nav>
 
+                {/* ── Footer info — compact, secondary ─────────── */}
                 <div className="sidebar-footer">
                     <h3>Visit Us</h3>
-                    
+
                     {settings?.contact_address && (
                         <p className="sidebar-address">{settings.contact_address}</p>
                     )}
-
                     {settings?.shop_start_time && settings?.shop_close_time && (
                         <p className="sidebar-timing">
-                            Daily : {settings.shop_start_time} to {settings.shop_close_time}
+                            {settings.shop_start_time} – {settings.shop_close_time}
                         </p>
                     )}
-
                     {settings?.contact_email && (
                         <p className="sidebar-email">{settings.contact_email}</p>
                     )}
 
-                    <div className="sidebar-divider-small"></div>
-
-                    <p className="booking-label">Booking Request</p>
                     {settings?.contact_phone && (
-                        <a href={`tel:${settings.contact_phone}`} className="sidebar-phone">
-                            {settings.contact_phone}
-                        </a>
+                        <>
+                            <div className="sidebar-divider-small" />
+                            <p className="booking-label">Booking</p>
+                            <a
+                                href={`tel:${settings.contact_phone}`}
+                                className="sidebar-phone"
+                            >
+                                {settings.contact_phone}
+                            </a>
+                        </>
                     )}
                 </div>
             </div>

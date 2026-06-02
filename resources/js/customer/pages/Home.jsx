@@ -188,8 +188,20 @@ function Home() {
                         className="home-navbar__hamburger"
                         onClick={() => setSidebarOpen(true)}
                         aria-label="Open menu"
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: '5px',
+                            padding: '6px',
+                        }}
                     >
-                        <span /><span /><span />
+                        <span style={{ display: 'block', width: '26px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
+                        <span style={{ display: 'block', width: '18px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
+                        <span style={{ display: 'block', width: '26px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
                     </button>
 
                     {/* Logo */}

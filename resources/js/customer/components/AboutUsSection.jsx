@@ -8,7 +8,7 @@ const getStorageUrl = (imagePath) => {
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
     return `${API_BASE_URL}/storage/${imagePath}`;
 };
-function AboutUsSection() {
+function AboutUsSection({ id }) {
     const [defaultImage, setDefaultImage] = useState(null);
     const [colors, setColors] = useState({
         color_one: '#a7a7a7',
@@ -66,7 +66,7 @@ function AboutUsSection() {
     ];
 
     return (
-        <section className="pvt-about-section">
+        <section id={id} className="pvt-about-section">
             <div className="pvt-about-wrap">
 
                 {/* Left — Image */}

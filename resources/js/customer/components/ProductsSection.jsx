@@ -53,7 +53,7 @@ function ProductsSection({ id }) {
                     <h2 style={{ color: settings?.main_color || '#ffffff' }}>
                         Featured Products
                     </h2>
-                    <p style={{ color: settings?.color_two || '#a7a7a7' }}>
+                    <p style={{ color: settings?.main_color || '#a7a7a7' }}>
                         Discover our top export products
                     </p>
                 </div>
