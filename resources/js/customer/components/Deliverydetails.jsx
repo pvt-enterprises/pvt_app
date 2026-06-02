@@ -1,133 +1,113 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Deliverydetails.css';
+import "./Deliverydetails.css";
 
-const steps = [
-    {
-        number: '01',
-        title: 'Product Enquiry',
-        desc: 'Share your product requirements, quantity, and target market with our team.',
-        accentKey: 'color_three',
-        fallback: '#699b65',
-    },
-    {
-        number: '02',
-        title: 'Documentation',
-        desc: 'We handle all regulatory and compliance documentation for the export.',
-        accentKey: 'main_color',
-        fallback: '#c9a84c',
-    },
-    {
-        number: '03',
-        title: 'Quality Check',
-        desc: 'Rigorous QC and third-party inspection before every consignment ships.',
-        accentKey: 'color_six',
-        fallback: '#4a9b8e',
-    },
-    {
-        number: '04',
-        title: 'Shipment & Delivery',
-        desc: 'Tracked global shipment with full import-clearance support provided.',
-        accentKey: 'color_two',
-        fallback: '#7a9db5',
-    },
-];
-
-function DeliveryDetails({ id }) {
-    const [settings, setSettings] = useState(null);
-
-    useEffect(() => {
-        axios
-            .get('/settings')
-            .then(res => setSettings(res.data.data || res.data))
-            .catch(err => console.error('Error fetching settings:', err));
-    }, []);
-
-    const getColor = (key, fallback) => settings?.[key] || fallback;
-
-    const cssVars = {
-        '--color-one':   getColor('color_one',   '#0c0d0c'),
-        '--color-two':   getColor('color_two',   '#a7a7a7'),
-        '--color-three': getColor('color_three', '#699b65'),
-        '--color-four':  getColor('color_four',  '#2a2b2c'),
-        '--color-five':  getColor('color_five',  '#151616'),
-        '--color-six':   getColor('color_six',   '#4a9b8e'),
-        '--main-color':  getColor('main_color',  '#c9a84c'),
-    };
+const Deliverydetails = ({ settings, id }) => {
+    const steps = [
+        {
+            number: "01",
+            title: "Product Enquiry",
+            description:
+                "Share your product requirements, quantity, and target market with our team.",
+            color: settings?.color_two || "#7BA56E",
+        },
+        {
+            number: "02",
+            title: "Documentation",
+            description:
+                "We handle all regulatory and compliance documentation for the export process.",
+            color: settings?.color_three || "#D4AF45",
+        },
+        {
+            number: "03",
+            title: "Quality Check",
+            description:
+                "Rigorous QC and third-party inspection before every consignment ships.",
+            color: settings?.color_four || "#4CB6B6",
+        },
+        {
+            number: "04",
+            title: "Shipment & Delivery",
+            description:
+                "Tracked global shipment with full import-clearance support provided.",
+            color: settings?.color_five || "#8CA8C2",
+        },
+    ];
 
     return (
-        <section id={id} className="dd-section" style={cssVars}>
-            <div className="dd-container">
+        <section
+            id={id}
+            className="delivery-details-section"
+            style={{
+                backgroundColor: settings?.color_one || "#0c0d0c",
+            }}
+        >
+            <div className="delivery-container">
 
-                {/* ── Header ─────────────────────────────────────────── */}
-                <div className="dd-header">
-                    <span className="dd-eyebrow">How It Works</span>
-                    <h2 className="dd-heading">From Order to Delivery</h2>
-                </div>
+                <span
+                    className="delivery-badge"
+                    style={{
+                        borderColor: settings?.color_two || "#7BA56E",
+                        color: settings?.color_two || "#7BA56E",
+                    }}
+                >
+                    HOW IT WORKS
+                </span>
 
-                {/* ── Timeline ───────────────────────────────────────── */}
-                <div className="dd-timeline">
+                <h2 className="delivery-title">
+                    From Order to Delivery
+                </h2>
 
-                    {/* Row 1 — circles with full-width lines between them */}
-                    <div className="dd-track-row">
-                        {steps.map((step, index) => {
-                            const accent = getColor(step.accentKey, step.fallback);
-                            return (
-                                <React.Fragment key={index}>
-                                    <div className="dd-circle-wrap">
-                                        <div
-                                            className="dd-circle-outer"
-                                            style={{ borderColor: accent }}
-                                        >
-                                            <div
-                                                className="dd-circle-inner"
-                                                style={{ backgroundColor: accent }}
-                                            >
-                                                {step.number}
-                                            </div>
-                                        </div>
-                                    </div>
+                <div className="delivery-timeline">
 
-                                    {/* Line fills ALL space between this circle and next */}
-                                    {index < steps.length - 1 && (
-                                        <div
-                                            className="dd-line"
-                                            style={{ backgroundColor: accent }}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            );
-                        })}
-                    </div>
+                    {steps.map((step, index) => (
+                        <div className="timeline-item" key={index}>
 
-                    {/* Row 2 — labels aligned under each circle */}
-                    <div className="dd-labels-row">
-                        {steps.map((step, index) => {
-                            const accent = getColor(step.accentKey, step.fallback);
-                            return (
+                            <div className="timeline-top">
                                 <div
-                                    className="dd-label"
-                                    key={index}
-                                    data-number={step.number}
+                                    className="timeline-circle"
+                                    style={{
+                                        borderColor: step.color,
+                                    }}
                                 >
-                                    <div className="dd-label-text">
-                                        <h3
-                                            className="dd-step-title"
-                                            style={{ color: accent }}
-                                        >
-                                            {step.title}
-                                        </h3>
-                                        <p className="dd-step-desc">{step.desc}</p>
+                                    <div
+                                        className="timeline-inner-circle"
+                                        style={{
+                                            backgroundColor: step.color,
+                                        }}
+                                    >
+                                        {step.number}
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
 
+                                {index !== steps.length - 1 && (
+                                    <div
+                                        className="timeline-line"
+                                        style={{
+                                            backgroundColor: `${step.color}50`,
+                                        }}
+                                    />
+                                )}
+                            </div>
+
+                            <h3
+                                className="timeline-title"
+                                style={{ color: step.color }}
+                            >
+                                {step.title}
+                            </h3>
+
+                            <p className="timeline-description">
+                                {step.description}
+                            </p>
+
+                        </div>
+                    ))}
                 </div>
+
             </div>
         </section>
     );
-}
+};
 
-export default DeliveryDetails;
+export default Deliverydetails;
