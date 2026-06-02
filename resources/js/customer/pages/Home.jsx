@@ -350,7 +350,7 @@ function Home() {
             <AboutUsSection id="about" />
             <CategoriesSection id="categories" />
             <ProductsSection id="products" />
-            <Deliverydetails id="delivery-details" />
+            <Deliverydetails id="delivery-details" settings={settings} />
             <div id="contact">
                 <BookingFormContent />
             </div>
