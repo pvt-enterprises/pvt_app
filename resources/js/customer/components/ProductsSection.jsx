@@ -39,18 +39,18 @@ function ProductsSection({ id }) {
         <section
             id={id}
             className="home-products-section"
-            style={{ backgroundColor: settings?.color_one || '#0c0d0c' }}
+            style={{ backgroundColor: settings?.white_color || '#0c0d0c' }}
         >
             <div className="home-section-inner">
 
                 <div className="home-section-header">
                     <span
                         className="home-section-eyebrow"
-                        style={{ color: settings?.color_three || '#699b65' }}
+                        style={{ color: settings?.main_color || '#699b65' }}
                     >
                         Top Picks
                     </span>
-                    <h2 style={{ color: settings?.color_three || '#ffffff' }}>
+                    <h2 style={{ color: settings?.main_color || '#ffffff' }}>
                         Featured Products
                     </h2>
                     <p style={{ color: settings?.color_two || '#a7a7a7' }}>

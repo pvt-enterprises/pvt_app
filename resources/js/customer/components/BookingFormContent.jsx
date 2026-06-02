@@ -244,7 +244,7 @@ function BookingFormContent() {
                             </div>
 
                             <div className="bc-field">
-                                <label className="bc-label" style={{ color: s?.color_two || '#0e0d0b' }}>
+                                <label className="bc-label" style={{ color: s?.main_color || '#0e0d0b' }}>
                                     Country
                                 </label>
                                 <select
@@ -260,7 +260,7 @@ function BookingFormContent() {
                             </div>
 
                             <div className="bc-field">
-                                <label className="bc-label" style={{ color: s?.color_two || '#0e0d0b' }}>
+                                <label className="bc-label" style={{ color: s?.main_color || '#0e0d0b' }}>
                                     Product Interest
                                 </label>
                                 <select
@@ -276,7 +276,7 @@ function BookingFormContent() {
                             </div>
 
                             <div className="bc-field">
-                                <label className="bc-label" style={{ color: s?.color_two || '#0e0d0b' }}>
+                                <label className="bc-label" style={{ color: s?.main_color || '#0e0d0b' }}>
                                     Message
                                 </label>
                                 <textarea
