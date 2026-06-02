@@ -333,7 +333,7 @@ function Home() {
                                         </span>
                                         <span
                                             className="home-hero__stat-label"
-                                            style={{ color: settings?.black_color || '#000000' }}
+                                            style={{ color: settings?.color_three || '#000000' }}
                                         >
                                             {stat.label}
                                         </span>

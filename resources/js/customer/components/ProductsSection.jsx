@@ -39,7 +39,7 @@ function ProductsSection({ id }) {
         <section
             id={id}
             className="home-products-section"
-            style={{ backgroundColor: settings?.main_color || '#0c0d0c' }}
+            style={{ backgroundColor: settings?.color_one || '#0c0d0c' }}
         >
             <div className="home-section-inner">
 
