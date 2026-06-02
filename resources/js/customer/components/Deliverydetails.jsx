@@ -7,30 +7,30 @@ const steps = [
         number: '01',
         title: 'Product Enquiry',
         desc: 'Share your product requirements, quantity, and target market with our team.',
+        accentKey: 'color_three',
+        fallback: '#699b65',
     },
     {
         number: '02',
         title: 'Documentation',
         desc: 'We handle all regulatory and compliance documentation for the export.',
+        accentKey: 'main_color',
+        fallback: '#c9a84c',
     },
     {
         number: '03',
         title: 'Quality Check',
         desc: 'Rigorous QC and third-party inspection before every consignment ships.',
+        accentKey: 'color_six',
+        fallback: '#4a9b8e',
     },
     {
         number: '04',
         title: 'Shipment & Delivery',
         desc: 'Tracked global shipment with full import-clearance support provided.',
+        accentKey: 'color_two',
+        fallback: '#7a9db5',
     },
-];
-
-/* Maps each step index to a CSS variable so colours stay in sync with dashboard */
-const stepAccents = [
-    'var(--color-three)',   /* 01 – green */
-    'var(--main-color)',    /* 02 – gold  */
-    'var(--color-six)',     /* 03 – teal  */
-    'var(--color-two)',     /* 04 – muted */
 ];
 
 function DeliveryDetails({ id }) {
@@ -43,76 +43,88 @@ function DeliveryDetails({ id }) {
             .catch(err => console.error('Error fetching settings:', err));
     }, []);
 
-    /* Inject CSS variables so every child can consume them */
-    const cssVars = settings
-        ? {
-              '--color-one':   settings.color_one   || '#0c0d0c',
-              '--color-two':   settings.color_two   || '#a7a7a7',
-              '--color-three': settings.color_three || '#699b65',
-              '--color-four':  settings.color_four  || '#2a2b2c',
-              '--color-five':  settings.color_five  || '#151616',
-              '--color-six':   settings.color_six   || '#699b65',
-              '--main-color':  settings.main_color  || '#c9a84c',
-          }
-        : {};
+    const getColor = (key, fallback) => settings?.[key] || fallback;
+
+    const cssVars = {
+        '--color-one':   getColor('color_one',   '#0c0d0c'),
+        '--color-two':   getColor('color_two',   '#a7a7a7'),
+        '--color-three': getColor('color_three', '#699b65'),
+        '--color-four':  getColor('color_four',  '#2a2b2c'),
+        '--color-five':  getColor('color_five',  '#151616'),
+        '--color-six':   getColor('color_six',   '#4a9b8e'),
+        '--main-color':  getColor('main_color',  '#c9a84c'),
+    };
 
     return (
-        <section id={id} className="hiw-section" style={cssVars}>
-            <div className="hiw-container">
+        <section id={id} className="dd-section" style={cssVars}>
+            <div className="dd-container">
 
-                {/* ── LEFT PANEL ─────────────────────────────────────────── */}
-                <div className="hiw-left">
-                    <span className="hiw-eyebrow">How It Works</span>
-                    <h2 className="hiw-heading">
-                        From Order<br />to Delivery
-                    </h2>
-                    <p className="hiw-subtext">
-                        A transparent, end-to-end process built for
-                        hassle-free global exports.
-                    </p>
+                {/* ── Header ─────────────────────────────────────────── */}
+                <div className="dd-header">
+                    <span className="dd-eyebrow">How It Works</span>
+                    <h2 className="dd-heading">From Order to Delivery</h2>
                 </div>
 
-                {/* ── RIGHT PANEL – vertical stepper ──────────────────────── */}
-                <div className="hiw-right">
-                    {steps.map((step, index) => (
-                        <div className="hiw-step" key={index}>
+                {/* ── Timeline ───────────────────────────────────────── */}
+                <div className="dd-timeline">
 
-                            {/* Circle + vertical connector */}
-                            <div className="hiw-track">
+                    {/* Row 1 — circles with full-width lines between them */}
+                    <div className="dd-track-row">
+                        {steps.map((step, index) => {
+                            const accent = getColor(step.accentKey, step.fallback);
+                            return (
+                                <React.Fragment key={index}>
+                                    <div className="dd-circle-wrap">
+                                        <div
+                                            className="dd-circle-outer"
+                                            style={{ borderColor: accent }}
+                                        >
+                                            <div
+                                                className="dd-circle-inner"
+                                                style={{ backgroundColor: accent }}
+                                            >
+                                                {step.number}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Line fills ALL space between this circle and next */}
+                                    {index < steps.length - 1 && (
+                                        <div
+                                            className="dd-line"
+                                            style={{ backgroundColor: accent }}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            );
+                        })}
+                    </div>
+
+                    {/* Row 2 — labels aligned under each circle */}
+                    <div className="dd-labels-row">
+                        {steps.map((step, index) => {
+                            const accent = getColor(step.accentKey, step.fallback);
+                            return (
                                 <div
-                                    className="hiw-circle-outer"
-                                    style={{ borderColor: stepAccents[index] }}
+                                    className="dd-label"
+                                    key={index}
+                                    data-number={step.number}
                                 >
-                                    <div
-                                        className="hiw-circle-inner"
-                                        style={{ backgroundColor: stepAccents[index] }}
-                                    >
-                                        {step.number}
+                                    <div className="dd-label-text">
+                                        <h3
+                                            className="dd-step-title"
+                                            style={{ color: accent }}
+                                        >
+                                            {step.title}
+                                        </h3>
+                                        <p className="dd-step-desc">{step.desc}</p>
                                     </div>
                                 </div>
-                                {index < steps.length - 1 && (
-                                    <div
-                                        className="hiw-connector"
-                                        style={{ background: stepAccents[index] }}
-                                    />
-                                )}
-                            </div>
+                            );
+                        })}
+                    </div>
 
-                            {/* Text */}
-                            <div className="hiw-content">
-                                <h3
-                                    className="hiw-step-title"
-                                    style={{ color: stepAccents[index] }}
-                                >
-                                    {step.title}
-                                </h3>
-                                <p className="hiw-step-desc">{step.desc}</p>
-                            </div>
-
-                        </div>
-                    ))}
                 </div>
-
             </div>
         </section>
     );
