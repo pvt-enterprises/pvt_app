@@ -143,9 +143,9 @@ function Footer() {
                                 key={link.id}
                                 className="ft-nav-link"
                                 onClick={() => handleFooterLinkClick(link)}
-                                style={{ color: textMuted }}
+                                style={{ color: textBright }}
                                 onMouseEnter={e => e.currentTarget.style.color = accentColor}
-                                onMouseLeave={e => e.currentTarget.style.color = textMuted}
+                                onMouseLeave={e => e.currentTarget.style.color = textBright}
                             >
                                 {link.title}
                             </button>
@@ -256,7 +256,7 @@ function Footer() {
                 className="ft-bottom"
                 style={{ borderTopColor: `${accentColor}22` }}
             >
-                <p style={{ color: textMuted }}>
+                <p style={{ color: textBright }}>
                     © {new Date().getFullYear()} {'PVT Enterprises'}. All Rights Reserved.
                 </p>
             </div>
