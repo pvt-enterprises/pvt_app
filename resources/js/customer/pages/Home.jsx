@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import WhatsAppButton from '../components/WhatsAppButton';
 import AboutUsSection from '../components/AboutUsSection';
 import Footer from '../components/Footer';
-// import Deliverydetails from '../components/Deliverydetails';
+import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 import CategoriesSection from '../components/CategoriesSection';
 import ProductsSection from '../components/ProductsSection';
@@ -177,60 +177,7 @@ function Home() {
                 }}
             />
 
-            {/* ── NAVBAR ── */}
-            <nav
-                className="home-navbar"
-                style={{ backgroundColor: settings?.white_color || '#92c86a' }}
-            >
-                <div className="home-navbar__inner">
-                    {/* Hamburger (mobile) */}
-                    <button
-                        className="home-navbar__hamburger"
-                        onClick={() => setSidebarOpen(true)}
-                        aria-label="Open menu"
-                        style={{
-                            background: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            gap: '5px',
-                            padding: '6px',
-                        }}
-                    >
-                        <span style={{ display: 'block', width: '26px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
-                        <span style={{ display: 'block', width: '18px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
-                        <span style={{ display: 'block', width: '26px', height: '2px', backgroundColor: settings?.main_color || '#699b65', borderRadius: '2px' }} />
-                    </button>
-
-                    {/* Logo */}
-                    <div className="home-navbar__logo">
-                        {getLogoUrl() ? (
-                            <img src={getLogoUrl()} alt={settings?.site_name || 'Logo'} />
-                        ) : (
-                            <span style={{ color: settings?.black_color || '#000', fontWeight: 600, fontSize: '1.2rem' }}>
-                                {settings?.site_name || 'PVT Enterprises'}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Nav links from top menu */}
-                    <ul className="home-navbar__links">
-                        {menuItems.map((item) => (
-                            <li key={item.id}>
-                                <button
-                                    className="home-navbar__link"
-                                    onClick={() => handleNavClick(item)}
-                                    style={{ color: settings?.black_color || '#1a1a1a' }}
-                                >
-                                    {item.link_text || item.title}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </nav>
+            <Navbar settings={settings} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
             {/* ── HERO / LANDING SECTION ── */}
             <section
@@ -305,7 +252,7 @@ function Home() {
                                     backgroundColor: settings?.color_six || '#a7a7a7',
                                     color: settings?.main_color || '#ffffff',
                                 }}
-                                onClick={() => navigate('/our-menus')}
+                                onClick={() => navigate('/products')}
                             >
                                 Explore Products
                             </button>
