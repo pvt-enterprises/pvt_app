@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 import './CategoryProducts.css';
 
 function CategoryProducts() {
@@ -38,19 +39,23 @@ function CategoryProducts() {
         return image.startsWith('http') ? image : `/storage/${image}`;
     };
 
-    if (loading) return <div className="cp-loading" style={{ backgroundColor: '#0c0d0c', color: '#699b65' }}>Loading...</div>;
+    const s = settings;
+    const bg     = s?.color_five  || '#0c0d0c';
+    const accent = s?.color_three || '#699b65';
+
+    if (loading) return <div className="cp-loading" style={{ backgroundColor: bg, color: accent }}>Loading...</div>;
 
     return (
-        <div className="cp-page" style={{ backgroundColor: settings?.color_five || '#0c0d0c' }}>
+        <div className="cp-page" style={{ backgroundColor: bg }}>
 
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
                 settings={settings}
-                onNavigate={(id) => {
+                onNavigate={(secId) => {
                     setSidebarOpen(false);
                     navigate('/');
-                    setTimeout(() => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); }, 400);
+                    setTimeout(() => document.getElementById(secId)?.scrollIntoView({ behavior: 'smooth' }), 400);
                 }}
             />
 
@@ -63,9 +68,9 @@ function CategoryProducts() {
                 )}
                 <div className="cp-hero__overlay" />
                 <div className="cp-hero__content">
-                    <h1 className="cp-hero__title" style={{ color: '#ffffff' }}>{category?.name}</h1>
+                    <h1 className="cp-hero__title">{category?.name}</h1>
                     {category?.description && (
-                        <p className="cp-hero__desc" style={{ color: 'rgba(255,255,255,0.75)' }}>{category.description}</p>
+                        <p className="cp-hero__desc">{category.description}</p>
                     )}
                 </div>
             </div>
@@ -73,37 +78,32 @@ function CategoryProducts() {
             {/* Products */}
             <div className="cp-body">
                 <div className="cp-section-header">
-                    <span className="cp-eyebrow" style={{ color: settings?.color_three || '#699b65', borderColor: settings?.color_three || '#699b65' }}>
-                        {category?.name}
-                    </span>
+                    <span className="cp-eyebrow" style={{ color: accent, borderColor: accent }}>{category?.name}</span>
                     <h2 style={{ color: '#ffffff' }}>Products in this Category</h2>
                 </div>
 
                 {products.length === 0 ? (
                     <div className="cp-empty">
-                        <p style={{ color: settings?.color_one || '#a7a7a7' }}>No products found in this category yet.</p>
-                        <Link to="/products" className="cp-btn-back"
-                            style={{ borderColor: settings?.color_three || '#699b65', color: settings?.color_three || '#699b65' }}>
-                            ← All Products
-                        </Link>
+                        <p style={{ color: s?.color_one || '#a7a7a7' }}>No products found in this category yet.</p>
+                        <Link to="/products" className="cp-btn-back" style={{ borderColor: accent, color: accent }}>← All Products</Link>
                     </div>
                 ) : (
                     <div className="cp-grid">
                         {products.map(product => (
                             <div className="cp-card" key={product.id}
-                                style={{ backgroundColor: settings?.color_seven || '#151616', borderColor: settings?.color_four || '#171819' }}>
-                                <div className="cp-card__image" style={{ backgroundColor: settings?.color_six || '#1a1b1c' }}>
+                                style={{ backgroundColor: s?.color_seven || '#151616', borderColor: s?.color_four || '#171819' }}>
+                                <div className="cp-card__image" style={{ backgroundColor: s?.color_six || '#1a1b1c' }}>
                                     <img src={getImageUrl(product.image)} alt={product.name}
                                         onError={(e) => { e.target.src = '/placeholder-image.jpg'; }} />
                                 </div>
                                 <div className="cp-card__body">
-                                    <h3 style={{ color: settings?.color_three || '#ffffff' }}>{product.name}</h3>
-                                    <p className="cp-card__brand" style={{ color: settings?.main_color || '#e4e590' }}>{product.brand_name}</p>
-                                    <p className="cp-card__desc" style={{ color: settings?.color_one || '#a7a7a7' }}>
+                                    <h3 style={{ color: accent }}>{product.name}</h3>
+                                    <p className="cp-card__brand" style={{ color: s?.main_color || '#e4e590' }}>{product.brand_name}</p>
+                                    <p className="cp-card__desc" style={{ color: s?.color_one || '#a7a7a7' }}>
                                         {product.packaging_details?.substring(0, 80)}{product.packaging_details?.length > 80 ? '...' : ''}
                                     </p>
                                     <Link to={`/products/${product.id}`} className="cp-card__btn"
-                                        style={{ backgroundColor: settings?.color_three || '#699b65', color: settings?.color_five || '#0c0d0c' }}>
+                                        style={{ backgroundColor: accent, color: bg }}>
                                         View All Details
                                     </Link>
                                 </div>
@@ -112,6 +112,8 @@ function CategoryProducts() {
                     </div>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 }

@@ -1,344 +1,269 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import './ContactUsPage.css';
-import { API_BASE_URL, getStorageUrl, extractArray } from '../../config/api';
+import { extractArray } from '../../config/api';
 
 function ContactUsPage() {
     const navigate = useNavigate();
     const [settings, setSettings] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [menuItems, setMenuItems] = useState([]);
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        message: ''
-    });
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
+    const [statusMsg, setStatusMsg] = useState('');
 
-    
-    useEffect(() => {
-        fetchSettings();
-        fetchMenuItems();
-    }, []);
+    useEffect(() => { fetchSettings(); }, []);
 
     const fetchSettings = async () => {
         try {
-            const response = await axios.get(`/settings`);
-            if (response.data.success) {
-                const settingsData = response.data.data;
-                setSettings(settingsData);
-                
-                if (settingsData.main_color) {
-                    document.documentElement.style.setProperty('--main-color', settingsData.main_color);
-                }
-            }
+            const response = await axios.get('/settings');
+            const data = response.data.data || response.data;
+            setSettings(data);
         } catch (error) {
             console.error('Error fetching settings:', error);
         }
     };
 
-    const fetchMenuItems = async () => {
-        try {
-            const response = await axios.get(`/menu-links`);
-            const items = extractArray(response);
-            setMenuItems(items.filter(item => item.link_type === 'nav_link' && item.is_active));
-        } catch (error) {
-            console.error('Error fetching menu items:', error);
-            setMenuItems([]);
-        }
-    };
-
-    const handleNavigation = (sectionId) => {
-        navigate('/');
-        setTimeout(() => {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 100);
-        setSidebarOpen(false);
-    };
+    const s = settings;
+    const bg        = s?.color_five    || '#0c0d0c';
+    const accent    = s?.color_three   || '#699b65';
+    const mainColor = s?.main_color    || '#e4e590';
+    const cardBg    = s?.color_seven   || '#151616';
+    const border    = s?.color_four    || '#2a2b2c';
+    const textMuted = s?.color_one     || '#a7a7a7';
+    const textWhite = s?.white_color   || '#ffffff';
 
     const getDefaultImageUrl = () => {
-        if (!settings?.default_image) return null;
-        if (settings.default_image.startsWith('http')) return settings.default_image;
-        return `http://127.0.0.1:8000/storage/${settings.default_image}`;
+        const p = s?.default_image;
+        if (!p) return null;
+        return p.startsWith('http') ? p : `/storage/${p}`;
     };
 
-    const getLogoUrl = () => {
-        const logoPath = settings?.website_logo || settings?.logo;
-        if (!logoPath) return null;
-        if (logoPath.startsWith('http')) return logoPath;
-        return `http://127.0.0.1:8000/storage/${logoPath}`;
+    const getGoogleMapsEmbedUrl = () =>
+        s?.map_embed_url ||
+        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2289.817743842076!2d-1.6603576232981123!3d54.976295272806695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e7713c90ad8c7%3A0x1da9e24158e1505c!2s69%20West%20Rd%2C%20Newcastle%20upon%20Tyne%20NE4%209PX%2C%20UK!5e0!3m2!1sen!2sin!4v1768118681006!5m2!1sen!2sin';
+
+    const formatTime = (t) => {
+        if (!t) return '';
+        const [h, m] = t.split(':');
+        const hr = parseInt(h);
+        return `${hr % 12 || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
     };
 
-    const formatTime = (time24) => {
-        if (!time24) return '';
-        const [hours, minutes] = time24.split(':');
-        const hour = parseInt(hours);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const hour12 = hour % 12 || 12;
-        return `${hour12}:${minutes} ${ampm}`;
-    };
-
-    const getGoogleMapsUrl = () => {
-        if (!settings?.contact_address) return '#';
-        const address = encodeURIComponent(settings.contact_address);
-        return `https://www.google.com/maps/search/?api=1&query=${address}`;
-    };
-
-    const getGoogleMapsEmbedUrl = () => {
-        // If map URL is set in settings, use that
-        if (settings?.map_embed_url) {
-            return settings.map_embed_url;
-        }
-        
-        // Otherwise use the hardcoded Curry Leaf location
-        return 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2289.817743842076!2d-1.6603576232981123!3d54.976295272806695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e7713c90ad8c7%3A0x1da9e24158e1505c!2s69%20West%20Rd%2C%20Newcastle%20upon%20Tyne%20NE4%209PX%2C%20UK!5e0!3m2!1sen!2sin!4v1768118681006!5m2!1sen!2sin';
-    };
-
-    const getSundayTiming = () => {
-        try {
-            const sundaySlots = settings?.booking_schedule?.sunday || [];
-            if (sundaySlots.length === 0) return 'Closed';
-            const firstSlot = sundaySlots[0];
-            const lastSlot = sundaySlots[sundaySlots.length - 1];
-            return `${formatTime(firstSlot)} - ${formatTime(lastSlot)}`;
-        } catch (error) {
-            return 'Closed';
-        }
-    };
-
-    const getWeekdayTiming = () => {
-        try {
-            const mondaySlots = settings?.booking_schedule?.monday || [];
-            if (mondaySlots.length === 0) return 'Closed';
-            const firstSlot = mondaySlots[0];
-            const lastSlot = mondaySlots[mondaySlots.length - 1];
-            return `${formatTime(firstSlot)} - ${formatTime(lastSlot)}`;
-        } catch (error) {
-            return 'Closed';
-        }
-    };
-
-    const handleChange = (field, value) => {
-        setFormData({
-            ...formData,
-            [field]: value
-        });
-    };
+    const handleChange = (field, value) => setFormData({ ...formData, [field]: value });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setMessage('');
-
+        setStatusMsg('');
         try {
-            const response = await axios.post(`/contact`, formData);
-            
-            if (response.data.success) {
-                setMessage('Message sent successfully! We will get back to you soon.');
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    message: ''
-                });
+            const res = await axios.post('/contact', formData);
+            if (res.data.success) {
+                setStatusMsg('success');
+                setFormData({ name: '', email: '', phone: '', message: '' });
             }
-        } catch (error) {
-            console.error('Contact error:', error);
-            setMessage('Failed to send message. Please try again.');
+        } catch {
+            setStatusMsg('error');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="contact-us-wrapper">
+        <div className="cu-page" style={{ backgroundColor: bg }}>
 
-            <Sidebar 
-                isOpen={sidebarOpen} 
+            <Sidebar
+                isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
-                menuItems={menuItems}
                 settings={settings}
-                onNavigate={handleNavigation}
+                onNavigate={(id) => {
+                    setSidebarOpen(false);
+                    navigate('/');
+                    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 400);
+                }}
             />
 
-            <nav className="main-nav">
-                <div className="nav-container">
-                    <button 
-                        className="hamburger-btn"
-                        onClick={() => setSidebarOpen(true)}
-                        aria-label="Open menu"
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+            <Navbar settings={settings} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-                    <div className="logo">
-                        {getLogoUrl() ? (
-                            <img src={getLogoUrl()} alt={settings?.site_name || 'Restaurant'} />
-                        ) : (
-                            <h1>{settings?.site_name || 'Curry Leaf'}</h1>
-                        )}
-                    </div>
-
-                    <button 
-                        onClick={() => navigate('/')} 
-                        className="find-table-btn"
-                    >
-                        BACK TO HOME
-                    </button>
-                </div>
-            </nav>
-
-            {/* Hero Section */}
-            <section className="contact-hero-section">
+            {/* ── Hero ─────────────────────────────────────────── */}
+            <div className="cu-hero">
                 {getDefaultImageUrl() && (
-                    <div 
-                        className="contact-hero-image"
-                        style={{ backgroundImage: `url(${getDefaultImageUrl()})` }}
-                    />
+                    <div className="cu-hero__bg" style={{ backgroundImage: `url(${getDefaultImageUrl()})` }} />
                 )}
-                
-                <div className="contact-hero-overlay"></div>
-
-                <div className="contact-hero-content">
-                    <p className="contact-hero-subtitle">GET IN TOUCH</p>
-                    
-                    <div className="divider">
-                        <span>◆</span>
-                        <span>◆</span>
-                        <span>◆</span>
-                    </div>
-
-                    <h1 className="contact-hero-title">Contact Us</h1>
+                <div className="cu-hero__overlay" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }} />
+                <div className="cu-hero__content">
+                    <span className="cu-eyebrow" style={{ color: accent, borderColor: accent }}>
+                        GET IN TOUCH
+                    </span>
+                    <h1 className="cu-hero__title" style={{ color: textWhite }}>Contact Us</h1>
                 </div>
-            </section>
+            </div>
 
-            {/* Contact Info & Map Section */}
-            <section className="contact-info-section">
-                <div className="contact-info-container">
-                    {/* Google Map */}
-                    <div className="map-wrapper">
+            {/* ── Map + Info cards ─────────────────────────────── */}
+            <div className="cu-map-section" style={{ backgroundColor: bg }}>
+                <div className="cu-map-wrap">
+                    <div className="cu-map">
                         <iframe
                             src={getGoogleMapsEmbedUrl()}
-                            width="100%"
-                            height="450"
+                            width="100%" height="100%"
                             style={{ border: 0 }}
-                            allowFullScreen=""
-                            loading="lazy"
+                            allowFullScreen loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            title="Curry Leaf Restaurant Location"
-                        ></iframe>
+                            title="Location Map"
+                        />
                     </div>
 
-                    {/* Info Cards */}
-                    <div className="contact-info-cards">
-                        <div className="info-card">
-                            <h3>Sunday's</h3>
-                            <p>{getSundayTiming()}</p>
-                        </div>
+                    <div className="cu-info-cards">
+                        {s?.shop_start_time && (
+                            <div className="cu-info-card" style={{ backgroundColor: cardBg, borderColor: border }}>
+                                <div className="cu-info-icon" style={{ color: accent }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                                <h4 style={{ color: accent }}>Working Hours</h4>
+                                <p style={{ color: textMuted }}>
+                                    {formatTime(s.shop_start_time)} – {formatTime(s.shop_close_time)}
+                                </p>
+                            </div>
+                        )}
 
-                        <div className="info-card center-card">
-                            <h3>Address</h3>
-                            <p>{settings?.contact_address || '69 West Rd, Newcastle upon Tyne NE4 9PX, UK'}</p>
-                        </div>
+                        {s?.contact_address && (
+                            <div className="cu-info-card cu-info-card--accent" style={{ backgroundColor: accent }}>
+                                <div className="cu-info-icon" style={{ color: bg }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </div>
+                                <h4 style={{ color: bg }}>Address</h4>
+                                <p style={{ color: bg, opacity: 0.8 }}>{s.contact_address}</p>
+                            </div>
+                        )}
 
-                        <div className="info-card">
-                            <h3>Monday - Friday</h3>
-                            <p>{getWeekdayTiming()}</p>
-                        </div>
+                        {s?.contact_phone && (
+                            <div className="cu-info-card" style={{ backgroundColor: cardBg, borderColor: border }}>
+                                <div className="cu-info-icon" style={{ color: accent }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                    </svg>
+                                </div>
+                                <h4 style={{ color: accent }}>Phone</h4>
+                                <a href={`tel:${s.contact_phone}`} style={{ color: textWhite, textDecoration: 'none' }}>
+                                    {s.contact_phone}
+                                </a>
+                            </div>
+                        )}
+
+                        {s?.contact_email && (
+                            <div className="cu-info-card" style={{ backgroundColor: cardBg, borderColor: border }}>
+                                <div className="cu-info-icon" style={{ color: accent }}>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </div>
+                                <h4 style={{ color: accent }}>Email</h4>
+                                <a href={`mailto:${s.contact_email}`} style={{ color: textWhite, textDecoration: 'none' }}>
+                                    {s.contact_email}
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Message Form Section */}
-            <section className="contact-form-section">
-                <div className="contact-form-container">
-                    <h2 className="form-section-title">Message Us</h2>
+            {/* ── Contact form ─────────────────────────────────── */}
+            <div className="cu-form-section" style={{ backgroundColor: bg }}>
+                <div className="cu-form-wrap">
+                    <div className="cu-form-header">
+                        <span className="cu-eyebrow" style={{ color: accent, borderColor: accent }}>
+                            SEND A MESSAGE
+                        </span>
+                        <h2 style={{ color: textWhite }}>We'd love to hear from you</h2>
+                    </div>
 
-                    {message && (
-                        <div className={`contact-alert ${message.includes('success') ? 'contact-alert-success' : 'contact-alert-error'}`}>
-                            {message}
+                    {statusMsg === 'success' && (
+                        <div className="cu-alert cu-alert--success" style={{ borderColor: accent, color: accent }}>
+                            ✓ Message sent successfully! We'll get back to you soon.
+                        </div>
+                    )}
+                    {statusMsg === 'error' && (
+                        <div className="cu-alert cu-alert--error">
+                            ✕ Failed to send message. Please try again.
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="contact-form">
-                        <div className="form-row">
-                            <div className="form-group">
+                    <form onSubmit={handleSubmit} className="cu-form" style={{ backgroundColor: cardBg, borderColor: border }}>
+                        <div className="cu-form-row">
+                            <div className="cu-form-group">
+                                <label style={{ color: textMuted }}>Name</label>
                                 <input
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => handleChange('name', e.target.value)}
-                                    placeholder="Name"
+                                    placeholder="Your name"
                                     required
-                                    className="contact-input"
+                                    className="cu-input"
+                                    style={{ backgroundColor: bg, borderColor: border, color: textWhite }}
                                 />
                             </div>
-
-                            <div className="form-group">
+                            <div className="cu-form-group">
+                                <label style={{ color: textMuted }}>Email</label>
                                 <input
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => handleChange('email', e.target.value)}
-                                    placeholder="Email"
+                                    placeholder="your@email.com"
                                     required
-                                    className="contact-input"
+                                    className="cu-input"
+                                    style={{ backgroundColor: bg, borderColor: border, color: textWhite }}
                                 />
                             </div>
                         </div>
 
-                        <div className="form-group">
+                        <div className="cu-form-group">
+                            <label style={{ color: textMuted }}>Phone</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => handleChange('phone', e.target.value)}
-                                placeholder="Phone"
+                                placeholder="Your phone number"
                                 required
-                                className="contact-input"
+                                className="cu-input"
+                                style={{ backgroundColor: bg, borderColor: border, color: textWhite }}
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="cu-form-group">
+                            <label style={{ color: textMuted }}>Message</label>
                             <textarea
                                 value={formData.message}
                                 onChange={(e) => handleChange('message', e.target.value)}
-                                placeholder="Message"
-                                rows="6"
+                                placeholder="Tell us about your requirements..."
+                                rows="5"
                                 required
-                                className="contact-textarea"
+                                className="cu-textarea"
+                                style={{ backgroundColor: bg, borderColor: border, color: textWhite }}
                             />
                         </div>
 
-                        <div className="form-actions">
-                            <button type="submit" disabled={loading} className="btn-send">
-                                {loading ? 'Sending...' : 'SEND YOUR MESSAGE'}
-                            </button>
-                            
-                            <span className="or-text">OR</span>
-                            
-                            <button 
-                                type="button" 
-                                onClick={() => navigate('/booking')} 
-                                className="btn-book-table"
-                            >
-                                BOOK A TABLE
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="cu-submit-btn"
+                            style={{ backgroundColor: accent, color: bg }}
+                        >
+                            {loading ? 'Sending...' : 'Send Message'}
+                        </button>
                     </form>
                 </div>
-            </section>
+            </div>
 
             <Footer />
-            <WhatsAppButton phone={settings?.contact_phone || '7878277198'} />
+            <WhatsAppButton phone={s?.whatsapp_number || s?.contact_phone || '876543219'} />
         </div>
     );
 }

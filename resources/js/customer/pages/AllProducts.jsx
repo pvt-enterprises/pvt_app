@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import './AllProducts.css';
+import Footer from '../components/Footer';
+import './ProductDetail.css';
 
-function AllProducts() {
+function ProductDetail() {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
+    const [product, setProduct] = useState(null);
     const [settings, setSettings] = useState(null);
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData(); }, [id]);
 
     const fetchData = async () => {
         try {
             const [prodRes, settingsRes] = await Promise.all([
-                axios.get('/products'),
+                axios.get(`/products/${id}`),
                 axios.get('/settings'),
             ]);
-            if (prodRes.data.success) setProducts(prodRes.data.data);
+            if (prodRes.data.success) setProduct(prodRes.data.data);
             setSettings(settingsRes.data.data || settingsRes.data);
         } catch (error) {
             console.error('Error:', error);
@@ -36,110 +36,97 @@ function AllProducts() {
         return image.startsWith('http') ? image : `/storage/${image}`;
     };
 
-    const getHeroImage = () => {
-        const path = settings?.default_image;
-        if (!path) return null;
-        return path.startsWith('http') ? path : `/storage/${path}`;
-    };
+    const s = settings;
+    const bg      = s?.color_five  || '#0c0d0c';
+    const accent  = s?.color_three || '#699b65';
+    const cardBg  = s?.color_seven || '#151616';
+    const border  = s?.color_four  || '#2a2b2c';
+    const muted   = s?.color_one   || '#a7a7a7';
 
-    if (loading) return (
-        <div className="ap-loading" style={{ backgroundColor: settings?.color_five || '#0c0d0c', color: settings?.color_three || '#699b65' }}>
-            Loading...
-        </div>
-    );
+    if (loading) return <div className="pd-loading" style={{ backgroundColor: bg, color: accent }}>Loading...</div>;
+    if (!product) return <div className="pd-loading" style={{ backgroundColor: bg, color: '#ff6b6b' }}>Product not found.</div>;
 
     return (
-        <div className="ap-page" style={{ backgroundColor: settings?.color_five || '#0c0d0c' }}>
+        <div className="pd-page" style={{ backgroundColor: bg }}>
 
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
                 settings={settings}
-                onNavigate={(id) => {
+                onNavigate={(secId) => {
                     setSidebarOpen(false);
                     navigate('/');
-                    setTimeout(() => {
-                        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-                    }, 400);
+                    setTimeout(() => document.getElementById(secId)?.scrollIntoView({ behavior: 'smooth' }), 400);
                 }}
             />
 
-            <Navbar
-                settings={settings}
-                sidebarOpen={sidebarOpen}
-                setSidebarOpen={setSidebarOpen}
-            />
+            <Navbar settings={settings} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-            {/* ── Hero ──────────────────────────────────────── */}
-            <div className="ap-hero">
-                {getHeroImage() && (
-                    <div
-                        className="ap-hero__bg"
-                        style={{ backgroundImage: `url(${getHeroImage()})` }}
-                    />
-                )}
-                <div className="ap-hero__overlay" />
-                <div className="ap-hero__content">
-                    <span
-                        className="ap-eyebrow"
-                        style={{ borderColor: settings?.color_three || '#699b65', color: settings?.color_three || '#699b65' }}
-                    >
-                        Our Products
-                    </span>
-                    <h1 className="ap-hero__title">All Products</h1>
-                    <p className="ap-hero__sub">
-                        Explore our full range of export-ready products
-                    </p>
+            {/* Hero */}
+            <div className="pd-hero">
+                <div className="pd-hero__bg" style={{ backgroundImage: `url(${getImageUrl(product.image)})` }} />
+                <div className="pd-hero__overlay" />
+                <div className="pd-hero__img-wrap">
+                    <img src={getImageUrl(product.image)} alt={product.name} className="pd-hero__img"
+                        onError={(e) => { e.target.src = '/placeholder-image.jpg'; }} />
                 </div>
             </div>
 
-            {/* ── Grid ──────────────────────────────────────── */}
-            <div className="ap-body">
-                {products.length === 0 ? (
-                    <div className="ap-empty">
-                        <p style={{ color: settings?.color_one || '#a7a7a7' }}>No products available yet.</p>
-                        <Link to="/" style={{ color: settings?.color_three || '#699b65' }}>← Back to Home</Link>
+            {/* Detail card */}
+            <div className="pd-body">
+                <div className="pd-card" style={{ backgroundColor: cardBg, borderColor: border }}>
+
+                    <div className="pd-breadcrumb">
+                        <Link to="/" style={{ color: muted }}>Home</Link>
+                        <span style={{ color: muted }}> / </span>
+                        <Link to="/products" style={{ color: muted }}>Products</Link>
+                        {product.category && (
+                            <>
+                                <span style={{ color: muted }}> / </span>
+                                <Link to={`/category/${product.category_id}`} style={{ color: muted }}>{product.category.name}</Link>
+                            </>
+                        )}
+                        <span style={{ color: muted }}> / </span>
+                        <span style={{ color: accent }}>{product.name}</span>
                     </div>
-                ) : (
-                    <div className="ap-grid">
-                        {products.map(product => (
-                            <div
-                                className="ap-card"
-                                key={product.id}
-                                style={{
-                                    backgroundColor: settings?.color_seven || '#151616',
-                                    borderColor: settings?.color_four || '#171819',
-                                }}
-                            >
-                                <div className="ap-card__image" style={{ backgroundColor: settings?.color_six || '#1a1b1c' }}>
-                                    <img
-                                        src={getImageUrl(product.image)}
-                                        alt={product.name}
-                                        onError={(e) => { e.target.src = '/placeholder-image.jpg'; }}
-                                    />
-                                </div>
-                                <div className="ap-card__body">
-                                    <h3 style={{ color: settings?.color_three || '#ffffff' }}>{product.name}</h3>
-                                    <p className="ap-card__brand" style={{ color: settings?.main_color || '#e4e590' }}>{product.brand_name}</p>
-                                    <p className="ap-card__desc" style={{ color: settings?.color_one || '#a7a7a7' }}>
-                                        {product.packaging_details?.substring(0, 80)}
-                                        {product.packaging_details?.length > 80 ? '...' : ''}
-                                    </p>
-                                    <Link
-                                        to={`/products/${product.id}`}
-                                        className="ap-card__btn"
-                                        style={{ backgroundColor: settings?.color_three || '#699b65', color: settings?.color_five || '#0c0d0c' }}
-                                    >
-                                        View All Details
-                                    </Link>
-                                </div>
+
+                    <h1 className="pd-title" style={{ color: '#ffffff' }}>{product.name}</h1>
+
+                    <div className="pd-rows">
+                        {[
+                            { label: 'Brand', value: product.brand_name },
+                            { label: 'Category', value: product.category?.name },
+                            { label: 'Packaging', value: product.packaging_details },
+                            { label: 'Price', value: product.price > 0 ? `$${product.price}` : null, price: true },
+                            { label: 'Export Charges', value: product.export_charges ? `$${product.export_charges}` : null },
+                        ].filter(r => r.value).map((row, i) => (
+                            <div className="pd-row" key={i} style={{ borderBottomColor: border }}>
+                                <span className="pd-label" style={{ color: muted }}>{row.label}</span>
+                                <span className="pd-value" style={{ color: row.price ? accent : '#ffffff', fontSize: row.price ? '1.3rem' : undefined, fontWeight: row.price ? 700 : undefined }}>
+                                    {row.value}
+                                </span>
                             </div>
                         ))}
                     </div>
-                )}
+
+                    <div className="pd-actions">
+                        {product.category && (
+                            <Link to={`/category/${product.category_id}`} className="pd-btn-secondary"
+                                style={{ borderColor: accent, color: accent }}>
+                                ← More in {product.category.name}
+                            </Link>
+                        )}
+                        <Link to="/products" className="pd-btn-primary"
+                            style={{ backgroundColor: accent, color: bg }}>
+                            All Products
+                        </Link>
+                    </div>
+                </div>
             </div>
+
+            <Footer />
         </div>
     );
 }
 
-export default AllProducts;
+export default ProductDetail;
