@@ -41,4 +41,8 @@ class Product extends Model
     {
         return $query->where('is_active', true);
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
 }

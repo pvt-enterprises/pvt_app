@@ -211,6 +211,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('mail-templates', MailTemplateController::class);
 
     // Products (Admin)
+    Route::delete('/products/images/{imageId}', [ProductController::class, 'deleteImage']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::post('/products/{id}', [ProductController::class, 'update']);
     Route::put('/products/{id}', [ProductController::class, 'update']);

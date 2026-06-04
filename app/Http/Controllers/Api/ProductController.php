@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Cloudinary\Cloudinary;
@@ -61,7 +62,7 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $products = Product::with('category')
+            $products = Product::with(['category', 'images'])
                 ->orderBy('created_at', 'desc')
                 ->get();
 
@@ -74,7 +75,7 @@ class ProductController extends Controller
     // SHOW
     public function show($id)
     {
-        $product = Product::with('category')->find($id);
+        $product = Product::with(['category', 'images'])->find($id);
 
         if (!$product) {
             return response()->json(['success' => false, 'message' => 'Product not found'], 404);
@@ -95,6 +96,8 @@ class ProductController extends Controller
             'category_id'       => 'nullable|exists:categories,id',
             'image'             => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
             'is_active'         => 'nullable',
+            'additional_images'   => 'nullable|array|max:5',       // ← ADD
+            'additional_images.*' => 'image|mimes:jpeg,jpg,png,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -119,6 +122,19 @@ class ProductController extends Controller
                 'is_active'         => true,
             ]);
 
+            // Handle additional images (up to 6 total including main)
+            $additionalImages = $request->file('additional_images', []);
+            $sortOrder = 1;
+            foreach (array_slice($additionalImages, 0, 5) as $img) {
+                if ($img->isValid()) {
+                    $url = $this->uploadToCloudinary($img);
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_url'  => $url,
+                        'sort_order' => $sortOrder++,
+                    ]);
+                }
+            }
             return response()->json([
                 'success' => true,
                 'message' => 'Product created successfully',
@@ -152,6 +168,8 @@ class ProductController extends Controller
             'export_charges'    => 'nullable|numeric|min:0',
             'category_id'       => 'nullable|exists:categories,id',
             'image'             => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
+            'additional_images'   => 'nullable|array|max:5',       // ← ADD
+            'additional_images.*' => 'image|mimes:jpeg,jpg,png,gif,webp|max:2048',
             'is_active'         => 'nullable',
         ]);
 
@@ -183,6 +201,22 @@ class ProductController extends Controller
 
             $product->update($data);
 
+            // Add new additional images
+            $additionalImages = $request->file('additional_images', []);
+            $existingCount = $product->images()->count();
+            $allowedMore = max(0, 5 - $existingCount);
+            $sortOrder = $product->images()->max('sort_order') + 1 ?: 1;
+
+            foreach (array_slice($additionalImages, 0, $allowedMore) as $img) {
+                if ($img->isValid()) {
+                    $url = $this->uploadToCloudinary($img);
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_url'  => $url,
+                        'sort_order' => $sortOrder++,
+                    ]);
+                }
+            }
             return response()->json([
                 'success' => true,
                 'message' => 'Product updated successfully',
@@ -213,6 +247,10 @@ class ProductController extends Controller
                 $this->deleteFromCloudinary($product->image, $this->getCloudinary());
             }
 
+            foreach ($product->images as $img) {
+                $this->deleteFromCloudinary($img->image_url, $this->getCloudinary());
+                $img->delete();
+            }
             $product->delete();
 
             return response()->json(['success' => true, 'message' => 'Product deleted successfully']);
@@ -223,6 +261,20 @@ class ProductController extends Controller
                 'message' => 'Failed to delete product',
                 'error'   => $e->getMessage()
             ], 500);
+        }
+    }
+    public function deleteImage($imageId)
+    {
+        $image = ProductImage::find($imageId);
+        if (!$image) {
+            return response()->json(['success' => false, 'message' => 'Image not found'], 404);
+        }
+        try {
+            $this->deleteFromCloudinary($image->image_url, $this->getCloudinary());
+            $image->delete();
+            return response()->json(['success' => true, 'message' => 'Image deleted']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to delete image'], 500);
         }
     }
 }

@@ -22,7 +22,7 @@ function ProductDetail() {
                 axios.get(`/products/${id}`),
                 axios.get('/settings'),
             ]);
-            if (prodRes.data.success) setProduct(prodRes.data.data);
+            if (prodRes.data.success) setProducts(prodRes.data.data);
             setSettings(settingsRes.data.data || settingsRes.data);
         } catch (error) {
             console.error('Error:', error);
