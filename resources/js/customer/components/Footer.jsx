@@ -73,20 +73,39 @@ function Footer() {
     };
 
     const handleFooterLinkClick = (link) => {
+        const url = link.url || '';
+
+        // CMS page
         if (link.page_id && pages[link.page_id]) {
             navigate(`/page/${pages[link.page_id].slug}`, { state: { page: pages[link.page_id] } });
-        } else if (link.url?.startsWith('#')) {
-            navigate('/');
-            setTimeout(() => {
-                const el = document.getElementById(link.url.replace('#', ''));
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        } else if (link.url?.startsWith('/')) {
-            navigate(link.url);
-        } else if (link.url && link.url !== '#') {
+            return;
+        }
+
+        // /#section — scroll on home page
+        if (url.startsWith('/#')) {
+            const sectionId = url.replace('/#', '');
+            if (window.location.pathname === '/') {
+                document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                navigate('/');
+                setTimeout(() => {
+                    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
+            return;
+        }
+
+        // Internal route like /products, /contact
+        if (url.startsWith('/')) {
+            navigate(url);
+            return;
+        }
+
+        // External
+        if (url && url !== '#') {
             link.target === '_blank'
-                ? window.open(link.url, '_blank')
-                : (window.location.href = link.url);
+                ? window.open(url, '_blank')
+                : (window.location.href = url);
         }
     };
 

@@ -53,37 +53,44 @@ function Sidebar({ isOpen, onClose, menuItems, settings, onNavigate }) {
     };
 
     const handleTopMenuLinkClick = (link) => {
-        if (link.page_id && pages[link.page_id]) {
-            const page = pages[link.page_id];
-            navigate(`/page/${page.slug}`, { state: { page } });
-            onClose();
-            return;
-        }
+        const url = link.url || '';
+        onClose();
 
-        if (link.url) {
-            if (link.url.startsWith('#')) {
-                const sectionId = link.url.replace('#', '');
+        // Handle /#section style — scroll on home page
+        if (url.startsWith('/#')) {
+            const sectionId = url.replace('/#', '');
+            if (window.location.pathname === '/') {
+                setTimeout(() => {
+                    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                }, 300); // wait for sidebar close animation
+            } else {
                 navigate('/');
                 setTimeout(() => {
                     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-                onClose();
-                return;
+                }, 600);
             }
-            if (link.url.startsWith('/')) {
-                navigate(link.url);
-                onClose();
-                return;
-            }
-            if (link.url !== '#') {
-                link.target === '_blank'
-                    ? window.open(link.url, '_blank')
-                    : (window.location.href = link.url);
-                onClose();
-                return;
-            }
+            return;
         }
-        onClose();
+
+        // Handle page_id (CMS pages)
+        if (link.page_id && pages[link.page_id]) {
+            const page = pages[link.page_id];
+            navigate(`/page/${page.slug}`, { state: { page } });
+            return;
+        }
+
+        // Internal route like /products, /contact
+        if (url.startsWith('/')) {
+            navigate(url);
+            return;
+        }
+
+        // External URL
+        if (url && url !== '#') {
+            link.target === '_blank'
+                ? window.open(url, '_blank')
+                : (window.location.href = url);
+        }
     };
 
     return (

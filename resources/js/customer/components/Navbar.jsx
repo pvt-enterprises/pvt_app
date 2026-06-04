@@ -71,7 +71,7 @@ function Navbar({ settings, sidebarOpen, setSidebarOpen }) {
                     onClick={() => setSidebarOpen && setSidebarOpen(true)}
                     aria-label="Open menu"
                     style={{
-                        background: 'transparent',
+                        background: settings?.main_color,
                         border: 'none',
                         cursor: 'pointer',
                         display: 'flex',
