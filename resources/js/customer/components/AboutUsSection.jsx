@@ -110,15 +110,14 @@ function AboutUsSection({ id }) {
                         className="pvt-desc"
                         style={{ color: colors.color_one }}
                     >
-                        PVT Enterprises is a dynamic export startup with over one year of
-                        experience in delivering quality products to global markets. We
-                        specialize in sourcing and supplying reliable goods while also
-                        assisting businesses in streamlining their export processes. Driven
-                        by a commitment to quality, efficiency, and customer satisfaction,
-                        we aim to build long-term partnerships across international markets.
-                        At PVT Enterprises, we combine modern trade practices with a
-                        customer-first approach to ensure smooth and trustworthy global
-                        transactions.
+                        PVT Enterprises is a dynamic export firm started in 2020 with an 
+                        expertise in delivering quality products to global markets. We 
+                        specialize in sourcing and supplying reliable goods while also 
+                        assisting businesses in streamlining their export processes. Driven 
+                        by a commitment to quality, efficiency, and customer satisfaction, 
+                        we aim to build long-term partnerships across international markets. 
+                        At PVT Enterprises, we combine modern trade practices with a customer-first
+                        approach to ensure smooth and trustworthy global transactions.
                     </p>
 
                     {/* Feature Boxes */}

@@ -112,11 +112,7 @@ function ProductForm() {
         setLoading(true);
         setError('');
 
-        if (!isEditMode && !imageFile) {
-            setError('Product image is required');
-            setLoading(false);
-            return;
-        }
+        
 
         try {
             const token = localStorage.getItem('auth_token');
@@ -282,7 +278,7 @@ function ProductForm() {
                 {/* Image Upload */}
                 <div className="form-group">
                     <label>
-                        Product Image *
+                        Product Image (Optional)
                         {isEditMode && ' (Leave empty to keep current image)'}
                     </label>
                     <input
@@ -290,7 +286,6 @@ function ProductForm() {
                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         onChange={handleImageChange}
                         className="form-control-file"
-                        required={!isEditMode}
                     />
                     <small className="form-text">
                         Accepted: JPEG, PNG, GIF, WebP. Recommended: 500px × 500px. Max: 2MB
@@ -308,7 +303,7 @@ function ProductForm() {
                 <div className="form-actions">
                     <button
                         type="submit"
-                        disabled={loading || (!isEditMode && !imageFile)}
+                        disabled={loading}
                         className="btn-submit"
                     >
                         {loading ? 'Saving... ⏳' : isEditMode ? 'Update Product' : 'Create Product'}
