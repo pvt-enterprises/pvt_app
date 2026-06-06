@@ -117,7 +117,8 @@ function ProductsSection({ id }) {
                             className="home-btn-view-all"
                             style={{
                                 color: settings?.color_six || '#ffffff',
-                                borderColor: settings?.color_six || '#699b65',
+                                backgroundColor: settings?.main_color || '#699b65',
+                                borderColor: settings?.main_color || '#699b65',
                             }}
                         >
                             View All Products ({products.length})

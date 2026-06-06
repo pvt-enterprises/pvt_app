@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import WhatsAppButton from '../components/WhatsAppButton';
 import Footer from '../components/Footer';
 import './AllProducts.css';
 
@@ -140,7 +141,7 @@ function AllProducts() {
                 )}
             </div>
             <Footer />
-            <WhatsAppButton phone={s?.whatsapp_number || s?.contact_phone || '9496757243'} />
+            <WhatsAppButton phone={settings?.whatsapp_number || settings?.contact_phone || '9496757243'} />
         </div>
     );
 }
