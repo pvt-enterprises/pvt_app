@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import PageView from './pages/PageView';
 import BookingPage from './pages/BookingPage';
 import ContactUsPage from './pages/ContactUsPage';
 // ✅ ADD THESE 3 IMPORTS
@@ -18,7 +17,6 @@ function CustomerApp() {
             <ThemeProvider> 
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/page/:slug" element={<PageView />} />
                     <Route path="/booking" element={<BookingPage />} />
                     <Route path="/contact" element={<ContactUsPage />} />
 

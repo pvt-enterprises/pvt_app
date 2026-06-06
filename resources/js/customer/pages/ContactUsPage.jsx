@@ -263,7 +263,7 @@ function ContactUsPage() {
             </div>
 
             <Footer />
-            <WhatsAppButton phone={s?.whatsapp_number || s?.contact_phone || '876543219'} />
+            <WhatsAppButton phone={s?.whatsapp_number || s?.contact_phone || '9496757243'} />
         </div>
     );
 }

@@ -139,6 +139,8 @@ function AllProducts() {
                     </div>
                 )}
             </div>
+            <Footer />
+            <WhatsAppButton phone={s?.whatsapp_number || s?.contact_phone || '9496757243'} />
         </div>
     );
 }

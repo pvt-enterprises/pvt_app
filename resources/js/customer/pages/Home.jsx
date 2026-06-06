@@ -316,7 +316,7 @@ function Home() {
             <div id="footer">
                 <Footer />
             </div>
-            <WhatsAppButton phone={settings?.whatsapp_number || '876543219'} />
+            <WhatsAppButton phone={settings?.whatsapp_number || '9496757243'} />
         </div>
     );
 }
