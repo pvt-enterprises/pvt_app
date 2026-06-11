@@ -37,12 +37,11 @@ Route::get('/categories/{category}', [CategoryController::class, 'show']);
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{page}', [PageController::class, 'show']);
 
-// Testimonials (Public)
-Route::get('/testimonials', [TestimonialController::class, 'index']);
-
 // Hero Banners (Public)
 Route::get('/hero-banners', [HeroBannerController::class, 'index']);
 Route::get('/hero-banners/{heroBanner}', [HeroBannerController::class, 'show']);
+
+Route::get('/gallery', [GalleryController::class, 'index']);
 
 // Settings (Public)
 Route::get('/settings', [SettingsController::class, 'index']);

@@ -94,7 +94,7 @@ class ProductController extends Controller
             'price'             => 'nullable|numeric|min:0',
             'export_charges'    => 'nullable|numeric|min:0',
             'category_id'       => 'nullable|exists:categories,id',
-            'image'             => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
+            'image'             => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048',
             'is_active'         => 'nullable',
             'additional_images'   => 'nullable|array|max:5',       // ← ADD
             'additional_images.*' => 'image|mimes:jpeg,jpg,png,gif,webp|max:2048',
