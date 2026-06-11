@@ -4,24 +4,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\MenuItemController;
 use App\Http\Controllers\Api\UserResponseController;
-use App\Http\Controllers\Api\TableBookingController;
 use App\Http\Controllers\Api\PageController;
-use App\Http\Controllers\Api\BlogController;
-use App\Http\Controllers\Api\BlogCategoryController;
-use App\Http\Controllers\Api\TeamMemberController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\HeroBannerController;
 use App\Http\Controllers\Api\SettingsController;
-use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\MenuLinkController;
-use App\Http\Controllers\Api\MailTemplateController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\FooterLinkController;
-use App\Http\Controllers\Api\DiagnosticController;
 use App\Http\Controllers\Api\ProductController;
 
 // ============================================
@@ -42,29 +34,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
 
-// Menu Items (Public)
-Route::get('/menu-items', [MenuItemController::class, 'index']);
-Route::get('/menu-items/{menuItem}', [MenuItemController::class, 'show']);
-
 // Pages (Public)
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{page}', [PageController::class, 'show']);
 
-// Blogs (Public) ✅ KEEP THESE
-Route::get('/blogs', [BlogController::class, 'index']);
-Route::get('/blogs/{blog}', [BlogController::class, 'show']);
-
-// Blog Categories (Public) ✅ ADD THIS
-Route::get('/blog-categories', [BlogCategoryController::class, 'index']);
-
-// Team Members (Public)
-Route::get('/team-members', [TeamMemberController::class, 'index']);
-
 // Testimonials (Public)
 Route::get('/testimonials', [TestimonialController::class, 'index']);
-
-// Gallery (Public)
-Route::get('/gallery', [GalleryController::class, 'index']);
 
 // Hero Banners (Public)
 Route::get('/hero-banners', [HeroBannerController::class, 'index']);
@@ -81,12 +56,6 @@ Route::get('/footer-links', [FooterLinkController::class, 'index']);
 
 // Public contact/booking
 Route::post('/user-responses', [UserResponseController::class, 'store']);
-Route::post('/table-bookings', [TableBookingController::class, 'store']);
-Route::post('/bookings', [TableBookingController::class, 'store']); // Alias
-
-// Diagnostic routes
-Route::get('/diagnose', [DiagnosticController::class, 'diagnose']);
-Route::post('/test-upload', [DiagnosticController::class, 'testUpload']);
 
 // Products (Public)
 Route::get('/products', [ProductController::class, 'index']);
@@ -107,23 +76,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-    // Menu Items (Admin)
-    Route::post('/menu-items', [MenuItemController::class, 'store']);
-    Route::post('/menu-items/{id}', [MenuItemController::class, 'update']);
-    Route::put('/menu-items/{id}', [MenuItemController::class, 'update']);
-    Route::delete('/menu-items/{id}', [MenuItemController::class, 'destroy']);
-
     // User Responses (Admin)
     Route::get('/user-responses', [UserResponseController::class, 'index']);
     Route::get('/user-responses/{userResponse}', [UserResponseController::class, 'show']);
     Route::put('/user-responses/{userResponse}', [UserResponseController::class, 'update']);
     Route::delete('/user-responses/{userResponse}', [UserResponseController::class, 'destroy']);
-
-    // Table Bookings (Admin)
-    Route::get('/table-bookings', [TableBookingController::class, 'index']);
-    Route::get('/table-bookings/{tableBooking}', [TableBookingController::class, 'show']);
-    Route::put('/table-bookings/{tableBooking}', [TableBookingController::class, 'update']);
-    Route::delete('/table-bookings/{tableBooking}', [TableBookingController::class, 'destroy']);
 
     // Pages (Admin CRUD)
     Route::post('/pages', [PageController::class, 'store']);
@@ -131,40 +88,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/pages/{id}/status', [PageController::class, 'updateStatus']);
     Route::delete('/pages/{id}', [PageController::class, 'destroy']);
 
-    // Blogs (Admin CRUD) ✅ FIXED - REMOVED DUPLICATE GET ROUTES
-    Route::post('/blogs', [BlogController::class, 'store']);
-    Route::put('/blogs/{id}', [BlogController::class, 'update']);
-    Route::post('/blogs/{id}', [BlogController::class, 'update']); // For FormData with _method
-    Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
-    
-    // Blog Categories (Admin) ✅ FIXED - REMOVED DUPLICATE INDEX
-    Route::post('/blog-categories', [BlogCategoryController::class, 'store']);
-    Route::get('/blog-categories/{id}', [BlogCategoryController::class, 'show']);
-    Route::put('/blog-categories/{id}', [BlogCategoryController::class, 'update']);
-    Route::post('/blog-categories/{id}', [BlogCategoryController::class, 'update']);
-    Route::delete('/blog-categories/{id}', [BlogCategoryController::class, 'destroy']);
-
-    // Team Members (Admin CRUD)
-    Route::post('/team-members', [TeamMemberController::class, 'store']);
-    Route::get('/team-members/{id}', [TeamMemberController::class, 'show']);
-    Route::post('/team-members/{id}', [TeamMemberController::class, 'update']);
-    Route::put('/team-members/{id}', [TeamMemberController::class, 'update']);
-    Route::patch('/team-members/{id}/toggle', [TeamMemberController::class, 'toggle']);
-    Route::delete('/team-members/{id}', [TeamMemberController::class, 'destroy']);
-
     // Testimonials (Admin CRUD)
     Route::post('/testimonials', [TestimonialController::class, 'store']);
     Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
     Route::post('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
-
-    // Gallery (Admin CRUD)
-    Route::post('/gallery', [GalleryController::class, 'store']);
-    Route::get('/gallery/{id}', [GalleryController::class, 'show']);
-    Route::post('/gallery/{id}', [GalleryController::class, 'update']);
-    Route::put('/gallery/{galleryImage}', [GalleryController::class, 'update']);
-    Route::delete('/gallery/{galleryImage}', [GalleryController::class, 'destroy']);
 
     // Hero Banners (Admin CRUD)
     Route::post('/hero-banners', [HeroBannerController::class, 'store']);
