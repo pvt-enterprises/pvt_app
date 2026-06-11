@@ -45,7 +45,7 @@ function ContactUsPage() {
 
     const getGoogleMapsEmbedUrl = () =>
         s?.map_embed_url ||
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2289.817743842076!2d-1.6603576232981123!3d54.976295272806695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e7713c90ad8c7%3A0x1da9e24158e1505c!2s69%20West%20Rd%2C%20Newcastle%20upon%20Tyne%20NE4%209PX%2C%20UK!5e0!3m2!1sen!2sin!4v1768118681006!5m2!1sen!2sin';
+        'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3932.8632166746556!2d76.75927347502711!3d9.692713690397616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zOcKwNDEnMzMuOCJOIDc2wrA0NSc0Mi43IkU!5e0!3m2!1sen!2sin!4v1781189833240!5m2!1sen!2sin';
 
     const formatTime = (t) => {
         if (!t) return '';

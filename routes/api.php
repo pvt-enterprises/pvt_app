@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\UserResponseController;
 use App\Http\Controllers\Api\PageController;
-use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\HeroBannerController;
 use App\Http\Controllers\Api\SettingsController;
@@ -88,20 +87,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/pages/{id}/status', [PageController::class, 'updateStatus']);
     Route::delete('/pages/{id}', [PageController::class, 'destroy']);
 
-    // Testimonials (Admin CRUD)
-    Route::post('/testimonials', [TestimonialController::class, 'store']);
-    Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
-    Route::post('/testimonials/{id}', [TestimonialController::class, 'update']);
-    Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
-    Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
-
     // Hero Banners (Admin CRUD)
     Route::post('/hero-banners', [HeroBannerController::class, 'store']);
     Route::put('/hero-banners/{heroBanner}', [HeroBannerController::class, 'update']);
     Route::delete('/hero-banners/{heroBanner}', [HeroBannerController::class, 'destroy']);
 
-    // Menus & Links (Admin)
-    Route::apiResource('menus', MenuController::class)->except(['index', 'show']);
     
     // Menu Links (Admin CRUD - except public index)
     Route::post('/menu-links', [MenuLinkController::class, 'store']);
@@ -135,9 +125,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/footer-links/{id}', [FooterLinkController::class, 'update']);
     Route::patch('/footer-links/{id}/toggle', [FooterLinkController::class, 'toggle']);
     Route::delete('/footer-links/{id}', [FooterLinkController::class, 'destroy']);
-
-    // Mail Templates (Admin)
-    Route::apiResource('mail-templates', MailTemplateController::class);
 
     // Products (Admin)
     Route::delete('/products/images/{imageId}', [ProductController::class, 'deleteImage']);
