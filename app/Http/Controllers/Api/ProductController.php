@@ -109,7 +109,10 @@ class ProductController extends Controller
         }
 
         try {
-            $imageUrl = $this->uploadToCloudinary($request->file('image'));
+            $imageUrl = null;
+            if ($request->hasFile('image')) {
+                $imageUrl = $this->uploadToCloudinary($request->file('image'));
+            }
 
             $product = Product::create([
                 'name'              => $request->name,

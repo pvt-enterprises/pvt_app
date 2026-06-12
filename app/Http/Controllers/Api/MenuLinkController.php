@@ -14,7 +14,7 @@ class MenuLinkController extends Controller
      */
     public function index(Request $request)
     {
-        $query = MenuLink::with(['menu', 'parent', 'children', 'page']);
+        $query = MenuLink::with(['parent', 'children', 'page']);
 
         if ($request->has('menu_id')) {
             $query->where('menu_id', $request->menu_id);
@@ -129,7 +129,7 @@ class MenuLinkController extends Controller
      */
     public function show($id)
     {
-        $link = MenuLink::with(['menu', 'parent', 'children', 'page'])->find($id);
+        $link = MenuLink::with(['parent', 'children', 'page'])->find($id);
 
         if (!$link) {
             return response()->json([
