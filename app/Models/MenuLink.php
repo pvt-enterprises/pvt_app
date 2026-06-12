@@ -29,11 +29,7 @@ class MenuLink extends Model
 
     protected $with = ['page'];
 
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class);
-    }
-
+   
     public function parent()
     {
         return $this->belongsTo(MenuLink::class, 'parent_id');
