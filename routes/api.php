@@ -169,10 +169,18 @@ Route::get('/debug-logs', function() {
     $logFile = storage_path('logs/laravel.log');
     if (file_exists($logFile)) {
         $logs = file_get_contents($logFile);
-        $lastError = substr($logs, -5000);
+        $lastError = substr($logs, -15000);
         return response('<pre>' . htmlspecialchars($lastError) . '</pre>');
     }
     return 'No logs found';
+});
+
+Route::get('/debug-errors', function() {
+    $logFile = storage_path('logs/laravel.log');
+    if (!file_exists($logFile)) return 'No logs found';
+    $lines = file($logFile);
+    $errors = array_filter($lines, fn($l) => str_contains($l, 'ERROR') || str_contains($l, 'Exception') || str_contains($l, 'SQLSTATE'));
+    return response('<pre>' . htmlspecialchars(implode('', array_slice($errors, -20))) . '</pre>');
 });
 
 Route::get('/test-gallery', function() {
