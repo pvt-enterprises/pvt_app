@@ -17,7 +17,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mysqli mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
 # Fix Apache MPM - do it separately
 RUN a2dismod mpm_event || true
