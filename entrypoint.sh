@@ -2,6 +2,8 @@
 set -e
 
 echo "🚀 Starting application..."
+echo "DEBUG: DB_USERNAME is [$DB_USERNAME]"
+echo "DEBUG: DB_HOST is [$DB_HOST]"
 
 # Fix MPM at runtime
 a2dismod mpm_event mpm_worker 2>/dev/null || true
